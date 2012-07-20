@@ -2,11 +2,13 @@ package com.ciotc.feemo;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.SwingUtilities;
 
 import com.ciotc.feemo.util.Constants;
 import com.ciotc.teemo.usbdll.USBDLL;
+import static com.ciotc.feemo.util.USBLock.LOCK;
 
 /**
  * 管理手柄的连接
@@ -29,8 +31,17 @@ public class HandleManger {
 			}
 			if (deviceIndex == 0) { //没有连接
 				//statusBar.setText(getResourceString("MainFrame.noHandleTips"));
-				if (isConnectHandle) //由连接变过来的
+				if (isConnectHandle) { //由连接变过来的
 					stopCheckButton();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							context.disconnectHandle();
+						}
+					});
+
+				}
 
 				isConnectHandle = false;
 
@@ -43,6 +54,13 @@ public class HandleManger {
 					}
 					if (!bool) //打不开相当没有连接上
 						return;
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							context.connectHandle();
+						}
+					});
 
 					startCheckButton();
 					//firePropertyChange(IS_OPEN_HANDLE, isOpenHandle, true);
@@ -95,36 +113,31 @@ public class HandleManger {
 	}
 
 	/**
-	 * 锁
-	 */
-	public static final Object LOCK = new Object();
-
-	/**
-	 * 状态
+	 * 检查手柄有无连接的状态
 	 */
 	public boolean isConnectHandle = false;
+	/**
+	 * 检查按键是有按下的状态
+	 */
 	boolean isButtonPress = false;
 
-	/**
-	 * 检查手柄有无连接的定时器
-	 */
-	public Timer handleTimer = null;
-	/**
-	 * 检查按键是有按下的定时
-	 */
-	public Timer buttonTimer = null;
+	public Timer timer = null;
 
 	/**
-	 * 检测任务
+	 * 检查手柄有无连接的任务
 	 */
 	HandleChecking handleTask;
+	/**
+	 *  检查按键是有按下的任务
+	 */
 	ButtonChecking buttonTask;
 
 	Context context;
 
 	public HandleManger(Context context) {
-		handleTimer = new Timer();
-		buttonTimer = new Timer();
+		timer = new Timer();
+		//handleTimer = new Timer();
+		//buttonTimer = new Timer();
 		this.context = context;
 	}
 
@@ -140,15 +153,19 @@ public class HandleManger {
 	 */
 	public void close() {
 		stopCheckButton();
-		stopCheckHanle();
-
-		handleTimer.cancel();
-		handleTimer.purge();
-		handleTimer = null;
-
-		buttonTimer.cancel();
-		buttonTimer.purge();
-		buttonTimer = null;
+		stopCheckHandle();
+		if (timer != null) {
+			timer.cancel();
+			timer.purge();
+			timer = null;
+		}
+//		handleTimer.cancel();
+//		handleTimer.purge();
+//		handleTimer = null;
+//
+//		buttonTimer.cancel();
+//		buttonTimer.purge();
+//		buttonTimer = null;
 
 		if (isConnectHandle) {
 			synchronized (LOCK) {
@@ -157,7 +174,6 @@ public class HandleManger {
 			synchronized (LOCK) {
 				USBDLL.clearButton2Info();
 			}
-
 			synchronized (LOCK) {
 				USBDLL.close();
 			}
@@ -167,10 +183,10 @@ public class HandleManger {
 
 	private void startCheckHandle() {
 		handleTask = new HandleChecking();
-		handleTimer.schedule(handleTask, 0, Constants.HANDLE_CHECK_PERIOD);
+		timer.schedule(handleTask, 0, Constants.HANDLE_CHECK_PERIOD);
 	}
 
-	private void stopCheckHanle() {
+	private void stopCheckHandle() {
 		if (buttonTask != null)
 			handleTask.cancel();
 	}
@@ -186,6 +202,6 @@ public class HandleManger {
 			USBDLL.clearButton1Info();
 		}
 		isButtonPress = false;
-		buttonTimer.scheduleAtFixedRate(buttonTask, 0, Constants.BUTTON1_CHECK_PERIOD); // 200ms
+		timer.scheduleAtFixedRate(buttonTask, 0, Constants.BUTTON1_CHECK_PERIOD); // 200ms
 	}
 }

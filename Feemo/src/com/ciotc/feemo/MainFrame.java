@@ -8,17 +8,31 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JFrame;
 
+import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.I18N;
 import com.ciotc.feemo.util.Util;
 
 public class MainFrame extends JFrame implements Context, PropertyChangeListener {
 
+	class MainFrameAdapter extends WindowAdapter {
+		@Override
+		public void windowClosing(WindowEvent e) {
+			handleManger.close();
+			Util.writeSetting();
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			handleManger.open();
+			Util.readSetting();
+		}
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	OutlookBar outlookBar;
 	StatusBar statusBar;
 	MainTabPane tabpane;
@@ -40,6 +54,11 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 		//setVisible(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void closeMovie() {
+		tabpane.closeRecordComponent();
 	}
 
 	void constructHanleManger() {
@@ -65,8 +84,14 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void fresh() {
+		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void newMovie() {
+		tabpane.newRecordComponent();
 	}
 
 	@Override
@@ -79,26 +104,26 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 	}
 
 	@Override
-	public void newMovie() {
-		tabpane.newRecordComponent();
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_EXIST)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_EXIST, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.CURRENT_COMPONENT_CHANGE)) {
+			firePropertyChange(ActionConstants.CURRENT_COMPONENT_CHANGE, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
+			firePropertyChange(ActionConstants.ALL_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, evt.getOldValue(), evt.getNewValue());
+		}
 	}
 
 	@Override
-	public void closeMovie() {
-		// TODO Auto-generated method stub
-		System.out.println("closeMovie not complement");
+	public void disconnectHandle() {
+		firePropertyChange(ActionConstants.HANDLE_CONNECT, true, false);
 	}
 
-	class MainFrameAdapter extends WindowAdapter {
-		@Override
-		public void windowClosed(WindowEvent e) {
-			handleManger.close();
-		}
-
-		@Override
-		public void windowOpened(WindowEvent e) {
-			handleManger.open();
-		}
+	@Override
+	public void connectHandle() {
+		firePropertyChange(ActionConstants.HANDLE_CONNECT, false, true);
 	}
 
 }

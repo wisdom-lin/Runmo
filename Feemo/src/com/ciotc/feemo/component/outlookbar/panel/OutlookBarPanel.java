@@ -1,6 +1,9 @@
 package com.ciotc.feemo.component.outlookbar.panel;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,7 +15,7 @@ import com.ciotc.feemo.component.outlookbar.PercentLayout;
 import com.ciotc.feemo.util.I18N;
 import com.ciotc.feemo.util.Util;
 
-public class OutlookBarPanel extends JPanel {
+public abstract class OutlookBarPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
 	/**
 	 * 
@@ -27,6 +30,13 @@ public class OutlookBarPanel extends JPanel {
 		this.tabs = tabs;
 	}
 
+	/**
+	 * 另外的初始化
+	 */
+	protected void init() {
+
+	}
+
 	protected void constructPanel(String className, String title, String[] buttons) {
 		setName(title);
 		setLayout(new PercentLayout(PercentLayout.VERTICAL, 0));
@@ -35,6 +45,8 @@ public class OutlookBarPanel extends JPanel {
 		for (int i = 0, c = buttons.length; i < c; i += 2) {
 			JButton button = new JButton(I18N.getString(className + buttons[i]));
 			button.setName(buttons[i]);
+			button.setActionCommand(buttons[i]);
+			button.addActionListener(this);
 			try {
 				button.setUI(new BasicOutlookButtonUI());
 				button.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -45,6 +57,30 @@ public class OutlookBarPanel extends JPanel {
 			add(button);
 		}
 		this.title = I18N.getString(className + "title");
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @return  找不到时返回null
+	 */
+	protected JButton findButtonByName(String name) {
+		for (Component comp : getComponents()) {
+			if (comp.getName().equals(name)) {
+				if (comp instanceof JButton)
+					return (JButton) comp;
+				else
+					return null;
+			}
+		}
+		return null;
+	}
+
+	protected void setAllButtonEnable(boolean bool) {
+		for (Component comp : getComponents()) {
+			if (comp instanceof JButton)
+				comp.setEnabled(bool);
+		}
 	}
 
 	public String getTitle() {

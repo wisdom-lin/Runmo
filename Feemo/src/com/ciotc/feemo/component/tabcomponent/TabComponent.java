@@ -6,12 +6,14 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.ciotc.feemo.component.TriggerCloser;
+
 /**
  * 继承JPanel是为了让它有{link JComponent#addPropertyChangeListener(java.beans.PropertyChangeListener)}方法
  * @author Linxiaozhi
  *
  */
-public class TabComponent extends JPanel implements ChangeListener {
+public abstract class TabComponent extends JPanel implements ChangeListener ,TriggerCloser{
 
 	/**
 	 * 
@@ -24,17 +26,12 @@ public class TabComponent extends JPanel implements ChangeListener {
 	protected String title;
 	protected String name;
 
-	public TabComponent() {
-		model = new Model();
-		model.addChangeListener(this);
-
-		view = new View();
-		setLayout(new BorderLayout());
-		add(view);
-
-		model.addChangeListener(view);
-
-	}
+	/**
+	 * 窗口开启或关闭状态
+	 * 开启true
+	 * 关闭false
+	 */
+	//protected boolean component_window_status = false;
 
 	public Doc getDoc() {
 		return doc;
@@ -52,10 +49,18 @@ public class TabComponent extends JPanel implements ChangeListener {
 		return title;
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
+	public void close() {
 
 	}
 
+	public void open() {
+
+	}
+	
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	
 }

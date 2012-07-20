@@ -4,15 +4,95 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
+import com.ciotc.feemo.setting.Settings;
 import com.ciotc.feemo.util.image.ImageWrapperResizableIcon;
 import com.ciotc.feemo.util.image.ResizableIcon;
 
 public class Util {
+
+	/**
+	 * 从文件读出Setting<br>
+	 * 使用方法：<br>
+	 * readSetting();(此方法只在程序启动时执行一次)<br>
+	 * Settings set = Settings.getInstance();<br>
+	 * set.getRecordFrame();
+	 * @return
+	 */
+	public static void readSetting() {
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(Constants.SETTINGS_PATH));
+			Settings setting = (Settings) ois.readObject();
+			Settings.setInstance(setting);
+		} catch (IOException e) {
+			e.printStackTrace();
+
+			Settings setting = new Settings();
+			ObjectOutputStream oos = null;
+			try {
+				oos = new ObjectOutputStream(new FileOutputStream(Constants.SETTINGS_PATH));
+				oos.writeObject(setting);
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			} finally {
+				if (oos != null)
+					try {
+						oos.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+			}
+			Settings.setInstance(setting);
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * 将Setting写回到文件<br>
+	 * 使用方法<br>
+	 * Settings set = Settings.getInstance();<br>
+	 * set.setRecordFrame(2000);<br>
+	 * writeSetting();(此方法只在程序关闭时执行一次)<br>
+	 */
+	public static void writeSetting() {
+
+		ObjectOutputStream oos = null;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream(Constants.SETTINGS_PATH));
+			oos.writeObject(Settings.getInstance());
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		} finally {
+			if (oos != null)
+				try {
+					oos.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+		}
+
+	}
+
 	/**
 	 * 根据屏幕大小返回合适的尺寸
 	 * @param widthRate 宽度比例
@@ -59,7 +139,7 @@ public class Util {
 		}
 		return null;
 	}
-	
+
 	public static class TmoFileFilter extends FileFilter {
 		public String getDescription() {
 			return "*.tmo(teemo源文件)";

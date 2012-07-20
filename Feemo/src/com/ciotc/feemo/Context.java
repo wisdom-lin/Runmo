@@ -18,4 +18,18 @@ public interface Context {
 	 */
 	void closeMovie();
 	
+	/**
+	 * 刷新
+	 */
+	void fresh();
+	
+	/**
+	 * 没连接手柄
+	 */
+	void disconnectHandle();
+	
+	/**
+	 * 连接上手柄
+	 */
+	void connectHandle();
 }

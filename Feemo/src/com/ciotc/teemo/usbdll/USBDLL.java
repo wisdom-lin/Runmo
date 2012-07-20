@@ -12,10 +12,11 @@ public class USBDLL {
 		//System.loadLibrary("lib.USB");
 		//加载dll
 		try {
-			String path = System.getProperty("user.dir");
-			System.load(path + "\\jnis\\usb_top.dll");
-			System.load(path + "\\jnis\\USB.dll");
-			//System.loadLibrary("USB");
+			//String path = System.getProperty("user.dir");
+			//System.load(path + "\\jnis\\usb_top.dll");
+			//System.load(path + "\\jnis\\USB.dll");
+			System.loadLibrary("usb_top");
+			System.loadLibrary("USB");
 		} catch (Error error) {
 
 		}

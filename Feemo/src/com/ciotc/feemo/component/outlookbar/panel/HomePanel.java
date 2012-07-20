@@ -1,16 +1,15 @@
 package com.ciotc.feemo.component.outlookbar.panel;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 
 import com.ciotc.feemo.Context;
 import com.ciotc.feemo.OutlookBar;
+import com.ciotc.feemo.util.ActionConstants;
+import com.ciotc.feemo.util.USBLock;
+import com.ciotc.teemo.usbdll.USBDLL;
 
 public class HomePanel extends OutlookBarPanel {
 
@@ -28,74 +27,51 @@ public class HomePanel extends OutlookBarPanel {
 	public HomePanel(OutlookBar tabs) {
 		super(tabs);
 		constructPanel(className, title, buttons);
+		init();
 	}
 
 	public HomePanel(OutlookBar tabs, Context context) {
 		this(tabs);
 		this.context = context;
-		constructActionsListeners();
+		//constructActionsListeners();
 	}
 
-	void constructActionsListeners() {
-		for (int i = 0; i < buttons.length; i += 2) {
-			String name = buttons[i];
-			for (Component comp : getComponents()) {
-				if (comp.getName().equals(name)) {
-					if (comp instanceof JButton) {
-						JButton button = (JButton) comp;
-						try {
-							//将name的第一个字母改为大写;
-							String temp = name.toUpperCase().substring(0, 1) + name.substring(1);
-
-							Class<?> clazz = Class.forName(getClass().getName() + "$" + temp + "Listener");
-							Constructor<?> constrcutor = clazz.getDeclaredConstructor(new Class[] { HomePanel.class });
-							ActionListener listener = (ActionListener) constrcutor.newInstance(HomePanel.this);
-							button.addActionListener(listener);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
-					}
-					break;
-				}
+	@Override
+	protected void init() {
+		super.init();
+		JButton button = findButtonByName("new");
+		button.setEnabled(false);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("new")) {
+//			if (context != null)
+//				context.newMovie();
+			
+			synchronized(USBLock.LOCK){
+				USBDLL.setButton1On();
 			}
-		}
-	}
-
-	class NewListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (context != null)
-				context.newMovie();
-		}
-
-	}
-
-	class OpenListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
+		} else if (e.getActionCommand().equals("open")) {
 			if (context != null)
 				context.openMovie();
+		} else if (e.getActionCommand().equals("option")) {
+			//TODO task
+		} else if (e.getActionCommand().equals("help")) {
+			//TODO task
 		}
-
 	}
 
-	class OptionListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("uncomplement");
-		}
-
-	}
-
-	class HelpListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("uncomplement");
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_EXIST)) {
+			Boolean bool = (Boolean) evt.getNewValue();
+			JButton button = findButtonByName("new");
+			button.setEnabled(!bool);
+		}else if (evt.getPropertyName().equals(ActionConstants.HANDLE_CONNECT)) {
+			Boolean bool = (Boolean) evt.getNewValue();
+			JButton button = findButtonByName("new");
+			button.setEnabled(bool);
 		}
 
 	}

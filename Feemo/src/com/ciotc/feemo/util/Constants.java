@@ -27,4 +27,33 @@ public class Constants {
 	 * 按键1连接检测周期,单位ms
 	 */
 	public static final int BUTTON1_CHECK_PERIOD = 10;
+	/**
+	 * 按键2连接检测周期,单位ms
+	 */
+	public static final int BUTTON2_CHECK_PERIOD = 10;
+	
+	/**
+	 * 配置的存放路径
+	 */
+	public static final String SETTINGS_PATH = ".feemo_settings";
+	
+	/**
+	 * 传感器的宽(传感器点数):52
+	 */
+	public static final int  SENSOR_WIDTH = 52;
+	
+	/**
+	 * 传感器的长(传感器点数):44
+	 */
+	public static final int  SENSOR_HEIGHT = 44;
+	
+	/**
+	 * 传感器总点数
+	 */
+	public static final int SENSOR_NUM = SENSOR_WIDTH*SENSOR_HEIGHT;
+	
+	/**
+	 * 绘制与控件的边界
+	 */
+	public static final int COMPONENT_GAP = 2;
 }
