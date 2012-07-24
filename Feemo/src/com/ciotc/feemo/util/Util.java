@@ -119,8 +119,18 @@ public class Util {
 	}
 
 	/**
+	 * 取得调整后的图片
+	 * 大小为Constants.ICON_WIDTH和Constants.ICON_HEIGHT
+	 * @param url
+	 * @return
+	 */
+	public static ResizableIcon getResizableIconFromResource(Class<?> clazz,String path) {
+		return ImageWrapperResizableIcon.getIcon(clazz.getResource(path), new Dimension(Constants.ICON_WIDTH, Constants.ICON_HEIGHT));
+	}
+	
+	/**
+	 * 打开对话框
 	 * 根据文件对话框，选取文件
-	 * 
 	 * @param parent
 	 * @param currentDirectory
 	 * @param filter
@@ -128,15 +138,41 @@ public class Util {
 	 * @return
 	 * @throws
 	 */
-	public static String chooseFile(Component parent, String currentDirectory) {
+	public static String chooseOpenFile(Component parent, String currentDirectory) {
 		JFileChooser chooser = new JFileChooser(currentDirectory);
-		FileFilter filter = TmoFileFilter.getInstance();
-		chooser.addChoosableFileFilter(filter);
-		chooser.setFileFilter(filter);
+		FileFilter filter1 = TmoFileFilter.getInstance();
+		chooser.addChoosableFileFilter(filter1);
+		FileFilter filter2 = FmoFileFilter.getInstance();
+		chooser.addChoosableFileFilter(filter2);
 		int returnVal = chooser.showOpenDialog(parent);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
+		return null;
+	}
+
+	/**
+	 * 保存对话框
+	 * 根据文件对话框，保存文件
+	 * @param parent
+	 * @param currentDirectory
+	 * @param filter
+	 *            文件过滤器
+	 * @param fileName 文件名
+	 * @return
+	 * @throws
+	 */
+	public static String chooseSaveFile(Component parent, String currentDirectory, String fileName) {
+		JFileChooser chooser = new JFileChooser(currentDirectory);
+		FileFilter filter = FmoFileFilter.getInstance();
+		chooser.addChoosableFileFilter(filter);
+		chooser.setFileFilter(filter);
+		chooser.setSelectedFile(new File(fileName));
+		int returnVal = chooser.showSaveDialog(parent);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return chooser.getSelectedFile().getAbsolutePath();
+		}
+		
 		return null;
 	}
 
@@ -151,13 +187,34 @@ public class Util {
 
 		public boolean check(File file) {
 			if (file.isFile())
-				return file.getName().toLowerCase().endsWith(".tmo");
+				return file.getName().toLowerCase().endsWith(Constants.TEEMO_FILE_SUFFIX);
 			else
 				return true;
 		}
 
 		public static TmoFileFilter getInstance() {
 			return new TmoFileFilter();
+		}
+	}
+
+	public static class FmoFileFilter extends FileFilter {
+		public String getDescription() {
+			return "*.fmo(feemo源文件)";
+		}
+
+		public boolean accept(File file) {
+			return check(file);
+		}
+
+		public boolean check(File file) {
+			if (file.isFile())
+				return file.getName().toLowerCase().endsWith(Constants.FEEMO_FILE_SUFFIX);
+			else
+				return true;
+		}
+
+		public static FmoFileFilter getInstance() {
+			return new FmoFileFilter();
 		}
 	}
 }

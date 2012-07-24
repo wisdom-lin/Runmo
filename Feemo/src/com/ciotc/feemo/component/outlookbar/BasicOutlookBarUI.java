@@ -452,9 +452,10 @@ public class BasicOutlookBarUI extends BasicTabbedPaneUI implements
   }
 
   protected static class TabButton extends JButton implements UIResource {
-    public TabButton() {}
+    public TabButton() {setBorderPainted(false);setFocusPainted(false); }
     public TabButton(ButtonUI ui) {
       setUI(ui);
+	  //  setUI(new BasicOutlookButtonUI());
     }
   }
 

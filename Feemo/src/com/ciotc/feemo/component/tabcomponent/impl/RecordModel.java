@@ -1,13 +1,17 @@
 package com.ciotc.feemo.component.tabcomponent.impl;
 
+import static com.ciotc.feemo.util.ActionConstants.VIEW_FRAME_MOUSE_MOVE;
 import static com.ciotc.feemo.util.USBLock.LOCK;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import com.ciotc.feemo.component.TriggerCloser;
@@ -20,7 +24,7 @@ import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.USBLock;
 import com.ciotc.teemo.usbdll.USBDLL;
 
-public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
+public class RecordModel extends Model implements TriggerCloser, TriggerOpener, PropertyChangeListener {
 	/**
 	 * 记录当前所在的状态
 	 * @author LinXiaozhi
@@ -66,9 +70,11 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 	int frame = set.getRecordFrame();
 	List<Integer[]> datas = new ArrayList<Integer[]>(); //存储的数据
 	volatile boolean pause = false; //暂停
-
+	boolean isSave = false;
+	int selectWhichView = 1;
+	
 	public RecordModel() {
-		constructTimer();
+
 	}
 
 	private void constructTimer() {
@@ -106,13 +112,27 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 
 			if (info == 1) { //按键开
 				if (!isPresson) {
-					play();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							play();
+
+						}
+					});
 				}
 				isPresson = true;
 			}
 			if (info == 2) { //按键关
 				if (isPresson) {
-					stop();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							stop();
+
+						}
+					});
 				}
 				isPresson = false;
 			}
@@ -131,13 +151,18 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 				USBDLL.setGain(_gain);
 				recvdata = USBDLL.collectFrame();
 			}
-			int[] temp = new int[recvdata.length];
+			final int[] temp = new int[recvdata.length];
 			for (int i = 0; i < temp.length; i++) {
-				temp[i] = recvdata[i]&0xff;
+				temp[i] = recvdata[i] & 0xff;
 			}
-			fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_DATA, temp)));
-		}
+			SwingUtilities.invokeLater(new Runnable() {
 
+				@Override
+				public void run() {
+					fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_DATA, temp)));
+				}
+			});
+		}
 	}
 
 	class DataCollectingInRecord extends TimerTask {
@@ -164,16 +189,31 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 				datas.add(bData);
 			}
 
-			int[] temp = new int[recvdata.length];
+			final int[] temp = new int[recvdata.length];
 			for (int i = 0; i < temp.length; i++) {
-				temp[i] = recvdata[i]&0xff;
+				temp[i] = recvdata[i] & 0xff;
 			}
-			fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_DATA, temp)));
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_DATA, temp)));
+					fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_LEN, counter)));
+				}
+			});
 			if (counter >= frame) {
-				cancel();
+				//cancel();
+				stop();
 			}
 		}
 
+	}
+
+	public void start() {
+		constructTimer();
+
+		status = Status.START;
+		fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_STATUS, Status.START)));
 	}
 
 	public void play() {
@@ -226,7 +266,7 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 //		firePropertyChange(MainTabbedPane.RECORD_STSTUS, status.get(), Status.STOP);
 //		//status = Status.STOP;
 //		status.set(Status.STOP);
-
+//		System.out.println("triggerstop");
 		dataCollectTask.cancel();
 //		dataCollectTask = new DataCollectingOutRecord();
 //		timer.schedule(dataCollectTask, 0, period);
@@ -310,6 +350,8 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 			close();
 			break;
 		case STOP:
+			if (!isSave)
+				stop();
 			close();
 			break;
 		case SAVED:
@@ -324,6 +366,18 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 		doc.setGain(gain);
 		doc.setPeriod(period);
 		doc.setData(datas);
+		isSave = true;
+	}
+
+	public void selectWhichView(int index){
+		if(selectWhichView != index){
+			selectWhichView = index;
+			fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.RECORD_VIEW_INDEX, selectWhichView)));
+		}
+	}
+	
+	public int getSelectWhichView() {
+		return selectWhichView;
 	}
 
 	@Override
@@ -339,4 +393,14 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener {
 			USBDLL.setButton2On();
 		}
 	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ActionConstants.RECORD_VIEW_MOUSE_MOVE)) {
+			fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.RECORD_VIEW_MOUSE_MOVE, evt.getNewValue())));
+		}
+	}
+
+	
+	
 }

@@ -4,12 +4,12 @@ public class Doc {
 	/**
 	 * 文件存放的路径
 	 */
-	String path;
+	protected String path;
 
 	/**
 	 * 文件的简短路径
 	 */
-	String simplePath;
+	protected String simplePath;
 
 	public String getPath() {
 		return path;

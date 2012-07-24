@@ -19,23 +19,26 @@ public class RecordDoc extends Doc {
 
 	/**
 	 * 数据格式
-	 * 1、帧数
-	 * 2、录制周期
-	 * 3、数据内容
-	 * 4、powa
-	 * 5、gain 
+	 * 0、标识{@link FEEMO_FILE_TAG}(用于标识文件类型)<br>
+	 * 1、帧数<br>
+	 * 2、录制周期<br>
+	 * 3、数据内容<br>
+	 * 4、powa<br>
+	 * 5、gain <br>
 	 */
 	public boolean saveDataToFile(String path) {
+		this.path = path;
 		DataOutputStream ds = null;
 		try {
 			ds = new DataOutputStream(new FileOutputStream(path));
-
+			ds.writeUTF(Constants.FEEMO_FILE_TAG);
+			
 			ds.writeInt(frameLen);
-			ds.writeFloat(period);
+			ds.writeInt(period);
 
 			for (int i = 0; i < frameLen; i++) {
 				for (int j = 0; j < Constants.SENSOR_NUM; j++) {
-					ds.write(data[i][j]);
+					ds.writeInt(data[i][j]);
 				}
 			}
 			ds.writeInt(powa);

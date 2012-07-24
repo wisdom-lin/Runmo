@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
+import com.ciotc.feemo.component.tabcomponent.impl.RecordModel.Status;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.I18N;
 
@@ -41,6 +42,16 @@ public class FirstStatusBar extends JPanel implements PropertyChangeListener {
 				text = I18N.getString("StatusBar.FirstStausBar.string2");
 			repaint();
 
-		}
+		}else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
+			Status status = (Status) evt.getNewValue();
+			switch (status) {
+			case START:
+				text = I18N.getString("StatusBar.FirstStausBar.string3");
+				break;
+			default:
+				break;
+			}
+			repaint();
+		} 
 	}
 }

@@ -97,7 +97,7 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 	@Override
 	public void openMovie() {
 		//弹出文件对话框
-		String path = Util.chooseFile(this, ".");
+		String path = Util.chooseOpenFile(this, ".");
 		if (path == null)
 			return;
 		tabpane.openRecordComponent(path);
@@ -109,10 +109,20 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_EXIST, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.CURRENT_COMPONENT_CHANGE)) {
 			firePropertyChange(ActionConstants.CURRENT_COMPONENT_CHANGE, evt.getOldValue(), evt.getNewValue());
-		} else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
+		}  else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
 			firePropertyChange(ActionConstants.ALL_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_DATA_LEN)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_DATA_LEN, evt.getOldValue(), evt.getNewValue());
+		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MODEL)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_MODEL, evt.getOldValue(), evt.getNewValue());
+		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());
 		}
 	}
 

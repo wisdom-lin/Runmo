@@ -1,12 +1,16 @@
 package com.ciotc.feemo.component.outlookbar.panel;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import com.ciotc.feemo.Context;
 import com.ciotc.feemo.OutlookBar;
+import com.ciotc.feemo.setting.SettingDialog;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.USBLock;
 import com.ciotc.teemo.usbdll.USBDLL;
@@ -56,7 +60,18 @@ public class HomePanel extends OutlookBarPanel {
 			if (context != null)
 				context.openMovie();
 		} else if (e.getActionCommand().equals("option")) {
-			//TODO task
+			final SettingDialog sd = new SettingDialog();
+			sd.addListener(tabs);
+			sd.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					sd.removeListener(tabs);
+				}
+			});
+			sd.setLocationRelativeTo(null);
+			sd.setModal(true);
+			sd.setVisible(true);
+			
 		} else if (e.getActionCommand().equals("help")) {
 			//TODO task
 		}

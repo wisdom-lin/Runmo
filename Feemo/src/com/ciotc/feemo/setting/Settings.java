@@ -1,6 +1,7 @@
 package com.ciotc.feemo.setting;
 
 import java.io.Serializable;
+import static com.ciotc.feemo.setting.SettingConstants.*;
 
 /**
  * 所有的配置信息
@@ -17,22 +18,22 @@ public class Settings implements Serializable {
 	/**
 	 * 检测周期
 	 */
-	float recordPeriod = 0.3f;
+	float recordPeriod = PEROID_DEFAULT;
 	/**
 	 * 检测的最大帧数
 	 */
-	int recordFrame = 1000;
+	int recordFrame = FRAME_DEFAULT;
 
 	/**
 	 * 驱动电压
 	 */
-	int powa = 100;
-	
+	int powa = POWA_DEFAULT;
+
 	/**
 	 * 增益值
 	 */
-	int gain = 0;
-	
+	int gain = GAIN_DEFAULT;
+
 	public static Settings getInstance() {
 		return instance;
 	}
@@ -77,7 +78,5 @@ public class Settings implements Serializable {
 	public String toString() {
 		return "Settings [recordPeriod=" + recordPeriod + ", recordFrame=" + recordFrame + ", powa=" + powa + ", gain=" + gain + "]";
 	}
-
-	
 
 }

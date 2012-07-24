@@ -33,16 +33,15 @@ public class HandleManger {
 				//statusBar.setText(getResourceString("MainFrame.noHandleTips"));
 				if (isConnectHandle) { //由连接变过来的
 					stopCheckButton();
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							context.disconnectHandle();
-						}
-					});
 
 				}
+				SwingUtilities.invokeLater(new Runnable() {
 
+					@Override
+					public void run() {
+						context.disconnectHandle();
+					}
+				});
 				isConnectHandle = false;
 
 				return;
@@ -54,18 +53,17 @@ public class HandleManger {
 					}
 					if (!bool) //打不开相当没有连接上
 						return;
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							context.connectHandle();
-						}
-					});
 
 					startCheckButton();
 					//firePropertyChange(IS_OPEN_HANDLE, isOpenHandle, true);
 				}
+				SwingUtilities.invokeLater(new Runnable() {
 
+					@Override
+					public void run() {
+						context.connectHandle();
+					}
+				});
 				isConnectHandle = true;
 
 			}
@@ -182,6 +180,28 @@ public class HandleManger {
 	}
 
 	private void startCheckHandle() {
+		//第一次检测
+//		int deviceIndex = 0;
+//		synchronized (LOCK) {
+//			deviceIndex = USBDLL.getDevicesNum();
+//		}
+//		if (deviceIndex == 0) { //没有连接
+//			context.disconnectHandle();
+//			isConnectHandle = false;
+//		} else {
+//			boolean bool;
+//			synchronized (LOCK) {
+//				bool = USBDLL.open(deviceIndex - 1);
+//			}
+//			if (!bool) {//打不开相当没有连接上
+//				isConnectHandle = false;
+//				context.disconnectHandle();
+//			} else {
+//				isConnectHandle = true;
+//				context.connectHandle();
+//			}
+//		}
+
 		handleTask = new HandleChecking();
 		timer.schedule(handleTask, 0, Constants.HANDLE_CHECK_PERIOD);
 	}

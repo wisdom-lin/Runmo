@@ -2,6 +2,7 @@ package com.ciotc.feemo.component.outlookbar.panel;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 
@@ -30,6 +31,7 @@ public abstract class OutlookBarPanel extends JPanel implements ActionListener, 
 		this.tabs = tabs;
 	}
 
+	
 	/**
 	 * 另外的初始化
 	 */
@@ -49,7 +51,7 @@ public abstract class OutlookBarPanel extends JPanel implements ActionListener, 
 			button.addActionListener(this);
 			try {
 				button.setUI(new BasicOutlookButtonUI());
-				button.setBorder(BorderFactory.createLineBorder(Color.black));
+				//button.setBorder(BorderFactory.createLineBorder(Color.black));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -1,6 +1,5 @@
 package com.ciotc.feemo.component.tabcomponent.impl;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
@@ -9,9 +8,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -21,9 +23,7 @@ import com.ciotc.feemo.util.I18N;
 import com.ciotc.feemo.util.Util;
 import com.ciotc.teemo.usbdll.USBDLL;
 
-
-
-public class GainSettingPanel extends JPanel implements ChangeListener, ItemListener{
+public class GainSettingPanel extends JPanel implements ChangeListener, ItemListener {
 
 	/**
 	 * 
@@ -43,7 +43,7 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 	/**value**/
 	int powa;
 	int gain;
-	
+
 	Settings set = Settings.getInstance();
 
 	public GainSettingPanel() {
@@ -52,6 +52,7 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		load();
 	}
+
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -71,7 +72,6 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 		jSlider.addChangeListener(this);
 		jComboBox.addItemListener(this);
 
-		
 		powaTitle.setText(I18N.getString("TabComponent.GainSettingPanel.powA"));
 
 		gainTitle.setText(I18N.getString("TabComponent.GainSettingPanel.gain"));
@@ -111,8 +111,6 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 		return panel;
 	}
 
-
-
 	void load() {
 		powa = set.getPowa();//pref.getInt("powa", 100);
 		gain = set.getGain();//pref.getInt("gain", 0);
@@ -121,14 +119,12 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 		gainText.setText(USBDLL.GAINS[gain] + "");
 	}
 
-	
 	void apply() {
 		set.setPowa(powa);
 		set.setGain(gain);
 		//pref.putInt("powa", powa1);
 		//pref.putInt("gain", gain1);
 	}
-	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -164,13 +160,12 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 						Util.writeSetting();
 					}
 				});
-				
-				
+
 				Util.readSetting();
 				GainSettingPanel gif = new GainSettingPanel();
-				
+
 				add(gif);
-				
+
 				setSize(600, 600);
 				setVisible(true);
 				setLocationRelativeTo(null);

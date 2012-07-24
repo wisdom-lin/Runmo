@@ -1,5 +1,6 @@
 package com.ciotc.feemo;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,6 +31,7 @@ public class OutlookBar extends JOutlookBar implements PropertyChangeListener {
 
 	public OutlookBar(Context context) {
 		setName("OutlookBar");
+		setBackground(Color.LIGHT_GRAY);
 		this.context = context;
 		setTabPlacement(JTabbedPane.LEFT);
 
@@ -43,7 +45,7 @@ public class OutlookBar extends JOutlookBar implements PropertyChangeListener {
 
 		ViewPanel view = new ViewPanel(this);
 		addTab(view.getTitle(), makeScrollPane(view));
-		addPropertyChangeListener(record);
+		addPropertyChangeListener(view);
 	}
 
 	@Override
@@ -57,6 +59,7 @@ public class OutlookBar extends JOutlookBar implements PropertyChangeListener {
 			} else if (comp instanceof ViewComponent) {
 				setSelectedIndex(2);
 			}
+			firePropertyChange(ActionConstants.CURRENT_COMPONENT_CHANGE, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
 			Boolean bool = (Boolean) evt.getNewValue();
 			if (bool)
@@ -65,7 +68,11 @@ public class OutlookBar extends JOutlookBar implements PropertyChangeListener {
 			firePropertyChange(ActionConstants.HANDLE_CONNECT, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, evt.getOldValue(), evt.getNewValue());
-		}
+		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MODEL)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_MODEL, evt.getOldValue(), evt.getNewValue());
+		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
+		} 
 	}
 
 	public static void main(String[] args) {

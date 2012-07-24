@@ -143,6 +143,7 @@ public class MainTabPane extends JTabbedPane implements ChangeListener, Property
 			addTabComponent(comp);
 		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
 			TabComponent comp = (TabComponent) evt.getNewValue();
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_CLOSE, false, true);
 			removeTabComponent(comp);
 			int count = getTabCount();
 			if (count <= 0)
@@ -151,6 +152,18 @@ public class MainTabPane extends JTabbedPane implements ChangeListener, Property
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, evt.getOldValue(), evt.getNewValue());
 
+		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_DATA_LEN)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_DATA_LEN, evt.getOldValue(), evt.getNewValue());
+
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MODEL)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_MODEL, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE)) {
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_OPEN_ERROR)) {
+			ViewComponent comp = (ViewComponent) evt.getNewValue();
+			comp.removePropertyChangeListener(this);
+		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE)) {
+			firePropertyChange(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());
 		}
 	}
 
