@@ -185,8 +185,8 @@ public class SettingDialog extends JDialog {
 		});
 		
 		panel.add(recordButton);
-		panel.add(UserButton);
-		panel.add(languageButton);
+		//panel.add(UserButton);
+		//panel.add(languageButton);
 
 		return panel;
 	}

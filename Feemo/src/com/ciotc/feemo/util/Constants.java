@@ -101,7 +101,7 @@ public class Constants {
 	/**
 	 * 传感器最大值
 	 */
-	public final static int SENSOR_MAX_VALUE = 1023;
+	public final static int SENSOR_MAX_VALUE = 255;
 
 	/**
 	 * 传感器最小值

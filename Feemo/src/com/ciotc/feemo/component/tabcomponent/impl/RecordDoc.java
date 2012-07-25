@@ -2,6 +2,9 @@ package com.ciotc.feemo.component.tabcomponent.impl;
 
 import static com.ciotc.feemo.util.Constants.SENSOR_NUM;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,13 +32,18 @@ public class RecordDoc extends Doc {
 	public boolean saveDataToFile(String path) {
 		this.path = path;
 		DataOutputStream ds = null;
+//		BufferedOutputStream bos = new BufferedOutputStream(new Bytea);
 		try {
-			ds = new DataOutputStream(new FileOutputStream(path));
+			ds = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
 			ds.writeUTF(Constants.FEEMO_FILE_TAG);
 			
 			ds.writeInt(frameLen);
 			ds.writeInt(period);
 
+			//ByteArrayOutputStream bos = new ByteArrayOutputStream(new BufferedOutputStream());
+			
+			//byte[] bs = bos.toByteArray();
+			
 			for (int i = 0; i < frameLen; i++) {
 				for (int j = 0; j < Constants.SENSOR_NUM; j++) {
 					ds.writeInt(data[i][j]);

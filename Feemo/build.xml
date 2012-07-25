@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2012-7-24 上午9:57:09                                                        
+
+     feemo    
+     description
+                   
+     lenovo                                                                
+     ====================================================================== -->
+<project name="Feemo" default="runnable jar">
+	<description>
+            feemo project
+    </description>
+	<property name="dest" value="${user.home}/Desktop" />
+	<property name="testDir" value="${dest}/teemo_test" />
+
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="runnable jar" depends="depends" description="description">
+		<mkdir dir="${testDir}" />
+		<jar destfile="${testDir}/teemo.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.ciotc.feemo.Starter" />
+				<attribute name="Class-path" value="libs/contour.jar libs/outlookbar.jar" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+		<mkdir dir="${testDir}/jnis" />
+		<copy todir="${testDir}/jnis" overwrite="true">
+			<fileset dir="jnis" />
+		</copy>
+		<mkdir dir="${testDir}/libs" />
+				<copy todir="${testDir}/libs" overwrite="true">
+					<fileset dir="libs" />
+				</copy>
+		<copy file=".feemo_settings" todir="${testDir}" overwrite="true">
+		</copy>
+		<copy file="run.bat" todir="${testDir}" overwrite="true">
+				</copy>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="depends">
+	</target>
+
+</project>

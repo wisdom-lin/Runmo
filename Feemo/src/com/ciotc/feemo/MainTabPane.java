@@ -1,9 +1,11 @@
 package com.ciotc.feemo;
 
+import static com.ciotc.feemo.util.I18N.getString;
 import static com.ciotc.feemo.util.USBLock.LOCK;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -12,6 +14,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -58,9 +61,17 @@ public class MainTabPane extends JTabbedPane implements ChangeListener, Property
 	 * @param path 影片的路径
 	 */
 	public void openRecordComponent(String path) {
-		TabComponent viewComp = new ViewComponent(path);
+		ViewComponent viewComp = new ViewComponent(path);
+		final Cursor cursor = getCursor();
+		if (!viewComp.readDataFromFile()) {
+			JOptionPane.showMessageDialog(this, getString("ViewComponent.readFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
+			setCursor(cursor);
+			return;
+		}
+		addTabComponent(viewComp);
 		viewComp.addPropertyChangeListener(this);
 		viewComp.open();
+		setCursor(cursor);
 	}
 
 	/**
@@ -138,10 +149,10 @@ public class MainTabPane extends JTabbedPane implements ChangeListener, Property
 			if (count <= 0)
 				firePropertyChange(ActionConstants.ALL_COMPONENT_CLOSE, false, true);
 
-		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_OPEN)) {
+		} /*else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_OPEN)) {
 			TabComponent comp = (TabComponent) evt.getNewValue();
 			addTabComponent(comp);
-		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
+		} */else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
 			TabComponent comp = (TabComponent) evt.getNewValue();
 			firePropertyChange(ActionConstants.VIEW_COMPONENT_CLOSE, false, true);
 			removeTabComponent(comp);

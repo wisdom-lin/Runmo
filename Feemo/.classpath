@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="libs/contour.jar"/>
-	<classpathentry kind="lib" path="libs/l2fprod-common-outlookbar.jar" sourcepath="F:/TDDOWNLOAD/l2fprod-common~svn/trunk/src/java/outlookbar"/>
+	<classpathentry kind="lib" path="libs/outlookbar.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

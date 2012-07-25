@@ -99,11 +99,11 @@ public class ViewPanel extends OutlookBarPanel {
 		speedButtons = new JRadioButton[5];
 		speedPanel = new JPanel();
 		
-		speedButtons[0] = new JRadioButton(String.format("%.1fs",SLOWEST_SPEED*1.0f/TIME_UNIT));
-		speedButtons[1] = new JRadioButton(String.format("%.1fs",MEDIUM_SLOW_SPEED*1.0f/TIME_UNIT));
-		speedButtons[2] = new JRadioButton(String.format("%.1fs",NOMAL_SPEED*1.0f/TIME_UNIT));
-		speedButtons[3] = new JRadioButton(String.format("%.1fs",MEDIUM_FAST_SPEED*1.0f/TIME_UNIT));
-		speedButtons[4] = new JRadioButton(String.format("%.1fs",FASTEST_SPEED*1.0f/TIME_UNIT));
+		speedButtons[0] = new JRadioButton(String.format("%.1f%s/%s",TIME_UNIT*1.0f / SLOWEST_SPEED*1.0f,I18N.getString("OutlookBar.ViewPanel.speedtitle1"),I18N.getString("OutlookBar.ViewPanel.speedtitle2")));
+		speedButtons[1] = new JRadioButton(String.format("%.1f%s/%s",TIME_UNIT*1.0f / MEDIUM_SLOW_SPEED*1.0f,I18N.getString("OutlookBar.ViewPanel.speedtitle1"),I18N.getString("OutlookBar.ViewPanel.speedtitle2")));
+		speedButtons[2] = new JRadioButton(String.format("%.1f%s/%s",TIME_UNIT*1.0f / NOMAL_SPEED*1.0f,I18N.getString("OutlookBar.ViewPanel.speedtitle1"),I18N.getString("OutlookBar.ViewPanel.speedtitle2")));
+		speedButtons[3] = new JRadioButton(String.format("%.1f%s/%s",TIME_UNIT*1.0f / MEDIUM_FAST_SPEED*1.0f,I18N.getString("OutlookBar.ViewPanel.speedtitle1"),I18N.getString("OutlookBar.ViewPanel.speedtitle2")));
+		speedButtons[4] = new JRadioButton(String.format("%.1f%s/%s",TIME_UNIT*1.0f / FASTEST_SPEED*1.0f,I18N.getString("OutlookBar.ViewPanel.speedtitle1"),I18N.getString("OutlookBar.ViewPanel.speedtitle2")));
 		
 		for (int i = 0; i < speedButtons.length; i++) {
 			final int index = i;
@@ -215,12 +215,13 @@ public class ViewPanel extends OutlookBarPanel {
 				//getParent().invalidate();
 				//getParent().repaint();
 			}
-		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_EXIST)) {
+		} /*else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_EXIST)) {
 			Boolean exist = (Boolean) evt.getNewValue();
+			System.out.println("exist:"+exist);
 			if (!exist) {
 				init();
 			}
-		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
+		}*/ else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
 			//Boolean exist = (Boolean) evt.getNewValue();
 			//if (!exist) {
 			init();

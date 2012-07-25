@@ -44,7 +44,7 @@ public abstract class ViewView extends View {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawString(title, Constants.VIEW_TITLE_GAP, Constants.VIEW_TITLE_GAP);
+		g.drawString(title, Constants.VIEW_TITLE_GAP, 3*Constants.VIEW_TITLE_GAP);
 		drawFrame(g, recvdata);
 	}
 	

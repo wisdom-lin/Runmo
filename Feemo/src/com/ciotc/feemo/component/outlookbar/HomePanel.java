@@ -24,7 +24,7 @@ public class HomePanel extends OutlookBarPanel {
 
 	String className = "OutlookBar.HomePanel.";
 	String title = "home";
-	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png", "help", "images/help.png" };
+	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png"/*, "help", "images/help.png"*/ };
 
 	Context context;
 

@@ -1,8 +1,13 @@
 package com.ciotc.feemo.component.tabcomponent.impl;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import com.ciotc.feemo.component.tabcomponent.Doc;
@@ -45,10 +50,18 @@ public class ViewDoc extends Doc {
 			period = rf.readInt();
 
 			data = new int[frameLen][Constants.SENSOR_NUM];
+			byte[] bs = new byte[Constants.SENSOR_NUM*4];
+			
 			for (int i = 0; i < frameLen; i++) {
+//				for (int j = 0; j < Constants.SENSOR_NUM; j++) {
+//					data[i][j] = rf.readInt();
+//				}
+				rf.readFully(bs);
+				DataInputStream dis = new DataInputStream(new BufferedInputStream(new ByteArrayInputStream(bs)));
 				for (int j = 0; j < Constants.SENSOR_NUM; j++) {
-					data[i][j] = rf.readInt();
+					data[i][j] = dis.readInt();
 				}
+				
 			}
 			powa = rf.readInt();
 			gain = rf.readInt();

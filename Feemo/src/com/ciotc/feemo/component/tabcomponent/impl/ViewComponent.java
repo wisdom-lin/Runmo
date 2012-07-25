@@ -6,12 +6,10 @@ import static com.ciotc.feemo.util.Constants.SENSOR_WIDTH;
 import static com.ciotc.feemo.util.I18N.getString;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 
-import javax.swing.JLayer;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
@@ -64,52 +62,23 @@ public class ViewComponent extends TabComponent {
 		return doc.getSimplePath();
 	}
 
+	public boolean readDataFromFile() {
+		ViewModel vmodel = (ViewModel) model;
+		ViewDoc vdoc = (ViewDoc) doc;
+		System.out.println("read" + System.currentTimeMillis());
+		boolean bool = vdoc.readDataFromFile();
+		System.out.println("read complete" + System.currentTimeMillis());
+		if (bool)
+			vmodel.setDoc(vdoc);
+		return bool;
+	}
+
 	@Override
 	public void open() {
 		super.open();
 		final ViewModel vmodel = (ViewModel) model;
-		ViewDoc vdoc = (ViewDoc) doc;
-		if (!vdoc.readDataFromFile()) {
-			JOptionPane.showMessageDialog(this, getString("ViewComponent.readFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
-			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN_ERROR, null, this);
-		} else {
-			//doc-->model
-			//System.out.println(System.currentTimeMillis());
-			vmodel.setDoc(vdoc);
-			//System.out.println(System.currentTimeMillis());
-//			waitLayerUI = new WaitLayerUI();
-//			JPanel jp = new JPanel();
-//			JLayer<JPanel> waitLayer = new JLayer<JPanel>(jp, waitLayerUI);
-////
-//			setLayout(new BorderLayout());
-//			getParent().add(waitLayer);
-//			waitLayerUI.start();
-			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN, null, ViewComponent.this);
-			//System.out.println(System.currentTimeMillis());
-			vmodel.init();
-			//System.out.println(System.currentTimeMillis());
-//			new Thread() {
-//				public void run() {
-//
-//					try {
-//						Thread.sleep(1500);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					SwingUtilities.invokeLater(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-							
-						
-//							waitLayerUI.stop();
-//						}
-//					});
-//				}
-//			}.start();
-//			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN, null, ViewComponent.this);
-//			vmodel.init();
-		}
+		vmodel.init();
+
 	}
 
 	@Override
