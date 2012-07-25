@@ -211,12 +211,12 @@ public class HandleManger {
 			handleTask.cancel();
 	}
 
-	private void stopCheckButton() {
+	public void stopCheckButton() {
 		if (buttonTask != null)
 			buttonTask.cancel();
 	}
 
-	private void startCheckButton() {
+	public void startCheckButton() {
 		buttonTask = new ButtonChecking();
 		synchronized (LOCK) {
 			USBDLL.clearButton1Info();

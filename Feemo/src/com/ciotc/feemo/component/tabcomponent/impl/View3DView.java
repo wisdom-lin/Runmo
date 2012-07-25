@@ -13,6 +13,7 @@ import java.awt.geom.Rectangle2D;
 
 import com.ciotc.feemo.component.tabcomponent.paint.MyColor;
 import com.ciotc.feemo.util.Constants;
+import com.ciotc.feemo.util.I18N;
 
 public class View3DView extends ViewView {
 
@@ -38,6 +39,7 @@ public class View3DView extends ViewView {
 	Point points[][] = new Point[Constants.SENSOR_HEIGHT + 1][Constants.SENSOR_WIDTH + 1];
 
 	View3DView() {
+		title = I18N.getString("ViewComponent.View3DView.title");
 		zoomx = 6;//缩放比例
 		zoomy = 5;
 
@@ -197,10 +199,10 @@ public class View3DView extends ViewView {
 		//开始绘图
 
 		Color color = null;
-		if (dataColor == 255)
-			color = MyColor.values()[16].getRgb();
+		if (dataColor == Constants.SENSOR_MAX_VALUE)
+			color = MyColor.values()[Constants.SENSOR_COLOR_NUM].getRgb();
 		else {
-			int in = dataColor >>> 4;
+			int in = dataColor >>> Constants.SENSOR_NUM_PER_COLOR;
 			color = MyColor.values()[in].getRgb();
 		}
 

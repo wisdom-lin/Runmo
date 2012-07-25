@@ -7,17 +7,22 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.I18N;
 import com.ciotc.feemo.util.Util;
+import com.l2fprod.common.swing.PercentLayout;
 
 public class MainFrame extends JFrame implements Context, PropertyChangeListener {
 
 	class MainFrameAdapter extends WindowAdapter {
 		@Override
 		public void windowClosing(WindowEvent e) {
+			if(isExitRecording){
+				closeMovie();
+			}
 			handleManger.close();
 			Util.writeSetting();
 		}
@@ -36,15 +41,19 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 	OutlookBar outlookBar;
 	StatusBar statusBar;
 	MainTabPane tabpane;
-
 	HandleManger handleManger;
-
+	boolean isExitRecording;
 	public MainFrame() {
 
 		constructOutlookBar();
 		constructStatusBar();
 		constructTabPane();
 		constructHanleManger();
+
+		JPanel panel = new JPanel(new PercentLayout(PercentLayout.HORIZONTAL, Constants.COMPONENT_GAP));
+		panel.add(outlookBar, "100");
+		panel.add(tabpane, "*");
+		add(panel, BorderLayout.CENTER);
 
 		addWindowListener(new MainFrameAdapter());
 
@@ -67,7 +76,7 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 
 	void constructOutlookBar() {
 		outlookBar = new OutlookBar(this);
-		add(outlookBar, BorderLayout.WEST);
+		//add(outlookBar, BorderLayout.WEST);
 		addPropertyChangeListener(outlookBar);
 	}
 
@@ -79,7 +88,7 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 
 	void constructTabPane() {
 		tabpane = new MainTabPane();
-		add(tabpane, BorderLayout.CENTER);
+		//add(tabpane, BorderLayout.CENTER);
 		tabpane.addPropertyChangeListener(this);
 	}
 
@@ -106,20 +115,27 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_EXIST)) {
+			Boolean bool = (Boolean) evt.getNewValue();
+			isExitRecording = bool;
+			if (!bool) {
+				//restart
+				handleManger.stopCheckButton();
+				handleManger.startCheckButton();
+			}
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_EXIST, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.CURRENT_COMPONENT_CHANGE)) {
 			firePropertyChange(ActionConstants.CURRENT_COMPONENT_CHANGE, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_CLOSE)) {
 			firePropertyChange(ActionConstants.VIEW_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
-		}  else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
+		} else if (evt.getPropertyName().equals(ActionConstants.ALL_COMPONENT_CLOSE)) {
 			firePropertyChange(ActionConstants.ALL_COMPONENT_CLOSE, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_DATA_LEN)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_DATA_LEN, evt.getOldValue(), evt.getNewValue());
-		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MODEL)) {
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MODEL)) {
 			firePropertyChange(ActionConstants.VIEW_COMPONENT_MODEL, evt.getOldValue(), evt.getNewValue());
-		}else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE)) {
+		} else if (evt.getPropertyName().equals(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE)) {
 			firePropertyChange(ActionConstants.VIEW_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE, evt.getOldValue(), evt.getNewValue());

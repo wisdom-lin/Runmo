@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -23,7 +24,7 @@ import com.ciotc.feemo.util.I18N;
 import com.ciotc.feemo.util.Util;
 import com.ciotc.teemo.usbdll.USBDLL;
 
-public class GainSettingPanel extends JPanel implements ChangeListener, ItemListener {
+public class GainSettingPanel extends JPanel /*implements ChangeListener, ItemListener */{
 
 	/**
 	 * 
@@ -31,8 +32,9 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("rawtypes")
-	private JComboBox jComboBox;
-	private JSlider jSlider;
+	//private JComboBox jComboBox;
+	private JSlider jSlider1;
+	private JSlider jSlider2;
 	private javax.swing.JLabel powaTitle;
 	private javax.swing.JLabel gainTitle;
 	private javax.swing.JLabel powaText;
@@ -45,22 +47,23 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 	int gain;
 
 	Settings set = Settings.getInstance();
+	{
+		System.out.println(set);
+	}
 
 	public GainSettingPanel() {
 		setLayout(new BorderLayout());
 		add(createPanel());
-		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		load();
 	}
 
-
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	//@SuppressWarnings({ "unchecked", "rawtypes" })
 	private JPanel createPanel() {
 		JPanel panel = new JPanel();
 
-		jComboBox = new JComboBox();
-		jSlider = new JSlider(0, 199);
+		//jComboBox = new JComboBox();
+		jSlider2 = new JSlider(0, 7);
+		jSlider1 = new JSlider(0, 199);
 		powaTitle = new javax.swing.JLabel();
 		gainTitle = new javax.swing.JLabel();
 		powaText = new javax.swing.JLabel();
@@ -68,9 +71,12 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 		valueText = new javax.swing.JLabel();
 		valueTitle = new javax.swing.JLabel();
 
-		jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "4", "5", "8", "10", "16", "32" }));
-		jSlider.addChangeListener(this);
-		jComboBox.addItemListener(this);
+		//jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "4", "5", "8", "10", "16", "32" }));
+		jSlider1.addChangeListener(new StateChanger1());
+		jSlider2.addChangeListener(new StateChanger2());
+		jSlider1.setMinorTickSpacing(1);
+		jSlider2.setMinorTickSpacing(1);
+		//jComboBox.addItemListener(this);
 
 		powaTitle.setText(I18N.getString("TabComponent.GainSettingPanel.powA"));
 
@@ -91,8 +97,8 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 						.addGap(21, 21, 21)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(powaTitle).addComponent(gainTitle).addComponent(valueTitle))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(jSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jSlider1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(valueText).addComponent(gainText).addComponent(powaText))
 						.addContainerGap(24, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
@@ -101,11 +107,11 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addComponent(powaText).addGap(18, 18, 18).addComponent(gainText))
 								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(powaTitle))
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(powaTitle))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(gainTitle))))
+												.addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(gainTitle))))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(valueText).addComponent(valueTitle))
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		return panel;
@@ -114,35 +120,42 @@ public class GainSettingPanel extends JPanel implements ChangeListener, ItemList
 	void load() {
 		powa = set.getPowa();//pref.getInt("powa", 100);
 		gain = set.getGain();//pref.getInt("gain", 0);
-		jSlider.setValue(powa);
-		jComboBox.setSelectedIndex(gain);
-		gainText.setText(USBDLL.GAINS[gain] + "");
+		System.out.println("powa:" + powa + ";" + "gain:" + gain);
+		jSlider1.setValue(powa);
+		jSlider2.setValue(gain);
+		//jComboBox.setSelectedIndex(gain);
+		//gainText.setText(USBDLL.GAINS[gain] + "");
 	}
 
-	void apply() {
+	void apply1() {
 		set.setPowa(powa);
+	}
+
+	void apply2() {
 		set.setGain(gain);
-		//pref.putInt("powa", powa1);
-		//pref.putInt("gain", gain1);
 	}
 
-	@Override
-	public void itemStateChanged(ItemEvent e) {
+	class StateChanger1 implements ChangeListener {
 
-		if (e.getStateChange() == ItemEvent.DESELECTED)
-			return;
-		gain = jComboBox.getSelectedIndex();
-		gainText.setText(USBDLL.GAINS[gain] + "");
-		valueText.setText(powa * USBDLL.GAINS[gain] + "");
-		apply();
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			powa = jSlider1.getValue();
+			powaText.setText(powa + "");
+			valueText.setText(powa * USBDLL.GAINS[gain] + "");
+			apply1();
+		}
+
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		powa = jSlider.getValue();
-		powaText.setText(powa + "");
-		valueText.setText(powa * USBDLL.GAINS[gain] + "");
-		apply();
+	class StateChanger2 implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			gain = jSlider2.getValue();
+			gainText.setText(USBDLL.GAINS[gain] + "");
+			valueText.setText(powa * USBDLL.GAINS[gain] + "");
+			apply2();
+		}
 	}
 
 	public static void main(String[] args) {

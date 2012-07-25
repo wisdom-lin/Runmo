@@ -11,13 +11,23 @@ public class Constants {
 	/**
 	 * 图标大小
 	 */
-	public static final int ICON_WIDTH = 24;
-	public static final int ICON_HEIGHT = 24;
+	public static final int ICON_WIDTH = 32;
+	public static final int ICON_HEIGHT = 32;
 
 	/**
 	 * 状态栏的高
 	 */
-	public static final int STATUS_BAR_HEIGHT = 15;
+	public static final int STATUS_BAR_HEIGHT = 20;
+
+	/**
+	 * 状态栏的左基准线(用于显示文字)
+	 */
+	public static final int STATUS_BAR_LEFT_BASE_LINE = 5;
+
+	/**
+	 * 状态栏的底基准线(用于显示文字)
+	 */
+	public static final int STATUS_BAR_BOTTOM_BASE_LINE = 5;
 
 	/**
 	 * 手柄连接检测周期,单位ms
@@ -51,6 +61,11 @@ public class Constants {
 	 * 传感器总点数
 	 */
 	public static final int SENSOR_NUM = SENSOR_WIDTH * SENSOR_HEIGHT;
+	
+	/**
+	 * 文件的边界
+	 */
+	public static final int VIEW_TITLE_GAP = 5;
 
 	/**
 	 * 绘制与控件的边界
@@ -65,7 +80,7 @@ public class Constants {
 	 * feemo文件后缀名
 	 */
 	public static final String FEEMO_FILE_SUFFIX = ".fmo";
-	
+
 	/**
 	 * feemo文件的标识:#1FEEMO1#
 	 */
@@ -82,5 +97,50 @@ public class Constants {
 	 * 显示3D图0x04
 	 */
 	public final static int _3D = 0x04;
+
+	/**
+	 * 传感器最大值
+	 */
+	public final static int SENSOR_MAX_VALUE = 1023;
+
+	/**
+	 * 传感器最小值
+	 */
+	public final static int SENSOR_MIN_VALUE = 0;
+
+	/**
+	 * 一种颜色包括的数值范围，这里需要用移位<br>
+	 * 因此4表示2^4=16
+	 */
+	public final static int SENSOR_NUM_PER_COLOR = 4;
+
+	/**
+	 * 将数值分为64种颜色（不包括最大值）
+	 */
+	public final static int SENSOR_COLOR_NUM = (SENSOR_MAX_VALUE + 1) >> SENSOR_NUM_PER_COLOR;
+	/**
+	 * 5000ms
+	 */
+	public static final int SLOWEST_SPEED = 5000;
+	/**
+	 * 1000ms
+	 */
+	public static final int NOMAL_SPEED = 1000;
+	/**
+	 * 2000ms
+	 */
+	public static final int MEDIUM_SLOW_SPEED = 2000;
+	/**
+	 * 500ms
+	 */
+	public static final int MEDIUM_FAST_SPEED = 500;
+	/**
+	 * 200ms
+	 */
+	public static final int FASTEST_SPEED = 200;
 	
+	/**
+	 * 1s = 1000ms
+	 */
+	public static final int TIME_UNIT = 1000;
 }

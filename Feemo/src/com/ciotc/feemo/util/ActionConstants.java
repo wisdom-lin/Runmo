@@ -20,6 +20,7 @@ public interface ActionConstants {
 	public static final String HANDLE_CONNECT = "HANDLE_CONNECT";
 
 	public static final String DATA_COLLECT_STATUS = "DATA_COLLECT_STATUS";
+	public static final String DATA_COLLECT_SAVE = "DATA_COLLECT_SAVE";
 	public static final String DATA_COLLECT_DATA = "DATA_COLLECT_DATA";
 	public static final String DATA_COLLECT_LEN = "DATA_COLLECT_LEN";
 

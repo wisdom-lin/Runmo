@@ -3,6 +3,8 @@ package com.ciotc.feemo.util;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.color.ColorSpace;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,8 +17,10 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import com.ciotc.feemo.setting.Settings;
+import com.ciotc.feemo.util.image.FilteredResizableIcon;
 import com.ciotc.feemo.util.image.ImageWrapperResizableIcon;
 import com.ciotc.feemo.util.image.ResizableIcon;
+import com.ciotc.feemo.util.image.ResizableIconUIResource;
 
 public class Util {
 
@@ -124,9 +128,21 @@ public class Util {
 	 * @param url
 	 * @return
 	 */
-	public static ResizableIcon getResizableIconFromResource(Class<?> clazz,String path) {
+	public static ResizableIcon getResizableIconFromResource(Class<?> clazz, String path) {
 		return ImageWrapperResizableIcon.getIcon(clazz.getResource(path), new Dimension(Constants.ICON_WIDTH, Constants.ICON_HEIGHT));
 	}
+	
+	/**
+	 * 取得调整后的图片的变灰图片
+	 * 大小为Constants.ICON_WIDTH和Constants.ICON_HEIGHT
+	 * @param url
+	 * @return
+	 */
+	public static ResizableIcon getResizableDisableIcon(ResizableIcon icon) {
+		return new ResizableIconUIResource(new FilteredResizableIcon(icon, new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null)));
+	}
+
+	
 	
 	/**
 	 * 打开对话框
@@ -140,8 +156,8 @@ public class Util {
 	 */
 	public static String chooseOpenFile(Component parent, String currentDirectory) {
 		JFileChooser chooser = new JFileChooser(currentDirectory);
-		FileFilter filter1 = TmoFileFilter.getInstance();
-		chooser.addChoosableFileFilter(filter1);
+		//FileFilter filter1 = TmoFileFilter.getInstance();
+		//chooser.addChoosableFileFilter(filter1);
 		FileFilter filter2 = FmoFileFilter.getInstance();
 		chooser.addChoosableFileFilter(filter2);
 		int returnVal = chooser.showOpenDialog(parent);
@@ -172,7 +188,7 @@ public class Util {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
-		
+
 		return null;
 	}
 

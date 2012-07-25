@@ -1,13 +1,17 @@
 package com.ciotc.feemo.component.statusbar;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import com.ciotc.feemo.component.tabcomponent.impl.RecordModel.Status;
 import com.ciotc.feemo.util.ActionConstants;
+import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.I18N;
 
 public class FirstStatusBar extends JPanel implements PropertyChangeListener {
@@ -23,13 +27,13 @@ public class FirstStatusBar extends JPanel implements PropertyChangeListener {
 	String text = I18N.getString("StatusBar.FirstStausBar.string2");
 
 	public FirstStatusBar() {
-
+//setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawString(text, 0, getHeight());
+		g.drawString(text, 0+Constants.STATUS_BAR_LEFT_BASE_LINE, getHeight()-Constants.STATUS_BAR_BOTTOM_BASE_LINE);
 	}
 
 	@Override

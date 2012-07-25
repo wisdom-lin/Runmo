@@ -19,6 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.ciotc.feemo.util.Util;
 
@@ -148,6 +149,15 @@ public class SettingDialog extends JDialog {
 		UserButton = new JButton(getString("SettingDialog.ViewSettingPanel.title"),getResizableIconFromResource(SettingDialog.class, "images/setting3.png"));
 		languageButton = new JButton(getString("SettingDialog.LanguagePanel.title"),getResizableIconFromResource(SettingDialog.class, "images/language.png"));
 		
+		recordButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		UserButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		languageButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		recordButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		UserButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		languageButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		recordButton.setFocusPainted(false);
+		UserButton.setFocusPainted(false);
+		languageButton.setFocusPainted(false);
 		
 		recordPanel = new RecordSettingPanel();
 		viewPanel = new ViewSettingPanel();

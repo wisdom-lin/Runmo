@@ -71,8 +71,9 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 	List<Integer[]> datas = new ArrayList<Integer[]>(); //存储的数据
 	volatile boolean pause = false; //暂停
 	boolean isSave = false;
+	//boolean isSaving = false;
 	int selectWhichView = 1;
-	
+
 	public RecordModel() {
 
 	}
@@ -270,7 +271,6 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 		dataCollectTask.cancel();
 //		dataCollectTask = new DataCollectingOutRecord();
 //		timer.schedule(dataCollectTask, 0, period);
-
 		status = Status.STOP;
 		fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_STATUS, Status.STOP)));
 	}
@@ -332,26 +332,34 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 
 	}
 
+	public void triggerSave(){
+		fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_SAVE, null)));
+	}
+	
 	/**
 	 * 直接关闭 根据现在的状态调用停止 保存 和关闭
 	 */
 	public void closeDirectly() {
+		System.out.println(status);
 		switch (status) {
 		case START:
 			close();
 			break;
 		case RECORDING:
 			stop();
+			triggerSave();
 			close();
 			break;
 		case PAUSE:
 			restore();
 			stop();
+			triggerSave();
 			close();
 			break;
 		case STOP:
-			if (!isSave)
-				stop();
+			if (!isSave) {
+				triggerSave();
+			}
 			close();
 			break;
 		case SAVED:
@@ -369,13 +377,13 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 		isSave = true;
 	}
 
-	public void selectWhichView(int index){
-		if(selectWhichView != index){
+	public void selectWhichView(int index) {
+		if (selectWhichView != index) {
 			selectWhichView = index;
 			fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.RECORD_VIEW_INDEX, selectWhichView)));
 		}
 	}
-	
+
 	public int getSelectWhichView() {
 		return selectWhichView;
 	}
@@ -401,6 +409,4 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 		}
 	}
 
-	
-	
 }

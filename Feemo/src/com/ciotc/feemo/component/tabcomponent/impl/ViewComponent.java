@@ -6,17 +6,19 @@ import static com.ciotc.feemo.util.Constants.SENSOR_WIDTH;
 import static com.ciotc.feemo.util.I18N.getString;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
+import javax.swing.JLayer;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import com.ciotc.feemo.component.tabcomponent.ChangeInfo;
 import com.ciotc.feemo.component.tabcomponent.TabComponent;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
-import com.ciotc.feemo.util.I18N;
 
 public class ViewComponent extends TabComponent {
 
@@ -27,6 +29,8 @@ public class ViewComponent extends TabComponent {
 	ViewView view2d;
 	ViewView viewContour;
 	ViewView view3d;
+
+	//WaitLayerUI waitLayerUI;
 
 	public ViewComponent(String path) {
 
@@ -63,16 +67,48 @@ public class ViewComponent extends TabComponent {
 	@Override
 	public void open() {
 		super.open();
-		ViewModel vmodel = (ViewModel) model;
+		final ViewModel vmodel = (ViewModel) model;
 		ViewDoc vdoc = (ViewDoc) doc;
 		if (!vdoc.readDataFromFile()) {
 			JOptionPane.showMessageDialog(this, getString("ViewComponent.readFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
 			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN_ERROR, null, this);
 		} else {
 			//doc-->model
+			//System.out.println(System.currentTimeMillis());
 			vmodel.setDoc(vdoc);
-			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN, null, this);
+			//System.out.println(System.currentTimeMillis());
+//			waitLayerUI = new WaitLayerUI();
+//			JPanel jp = new JPanel();
+//			JLayer<JPanel> waitLayer = new JLayer<JPanel>(jp, waitLayerUI);
+////
+//			setLayout(new BorderLayout());
+//			getParent().add(waitLayer);
+//			waitLayerUI.start();
+			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN, null, ViewComponent.this);
+			//System.out.println(System.currentTimeMillis());
 			vmodel.init();
+			//System.out.println(System.currentTimeMillis());
+//			new Thread() {
+//				public void run() {
+//
+//					try {
+//						Thread.sleep(1500);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					SwingUtilities.invokeLater(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+							
+						
+//							waitLayerUI.stop();
+//						}
+//					});
+//				}
+//			}.start();
+//			firePropertyChange(ActionConstants.VIEW_COMPONENT_OPEN, null, ViewComponent.this);
+//			vmodel.init();
 		}
 	}
 

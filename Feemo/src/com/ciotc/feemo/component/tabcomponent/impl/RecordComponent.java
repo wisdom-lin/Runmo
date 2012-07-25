@@ -28,9 +28,6 @@ public class RecordComponent extends TabComponent {
 	 */
 	private static int counter = 0;
 
-	Record2DView view2d;
-	RecordContourView viewContour;
-	Record3DView view3d;
 	/**
 	 * //1表示2D，2表示轮廓，3表示3D
 	 */
@@ -49,7 +46,7 @@ public class RecordComponent extends TabComponent {
 		add(view);
 		view.addPropertyChangeListener((RecordModel) model);
 		model.addChangeListener(view);
-		
+
 		doc = new RecordDoc();
 
 		this.title = I18N.getString("RecordComponent.title") + (++counter);
@@ -91,15 +88,15 @@ public class RecordComponent extends TabComponent {
 		super.close();
 		RecordModel rm = (RecordModel) model;
 		rm.closeDirectly();
-		firePropertyChange(ActionConstants.RECORD_COMPONENT_CLOSE, null, this);
+		//firePropertyChange(ActionConstants.RECORD_COMPONENT_CLOSE, null, this);
 	}
 
 	@Override
 	public void triggerClose() {
-		synchronized (USBLock.LOCK) {
-			USBDLL.clearButton1Info();
-		}
-//		close();
+//		synchronized (USBLock.LOCK) {
+//			USBDLL.clearButton1Info();
+//		}
+		close();
 	}
 
 	public void triggerOpen() {
@@ -107,37 +104,44 @@ public class RecordComponent extends TabComponent {
 	}
 
 	public void triggerSave() {
-		RecordDoc rdoc = (RecordDoc) doc;
-		String path = Util.chooseSaveFile(this, ".", title + Constants.FEEMO_FILE_SUFFIX);
-		if (path != null) {
-			((RecordModel) model).saveToDoc(rdoc);
-			if (rdoc.saveDataToFile(path)) {
-				save();
-				JOptionPane.showMessageDialog(this, getString("RecordComponent.saveSuccess"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(this, getString("RecordComponent.saveFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
+		Object[] options = { getString("RecordComponent.save"), getString("RecordComponent.notSave") };
+		int response = JOptionPane.showOptionDialog(this, getString("RecordComponent.isSaveMoive"), getString("Feemo"), JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		if (response == 0) {
+			RecordDoc rdoc = (RecordDoc) doc;
+			String path = Util.chooseSaveFile(this, ".", title + Constants.FEEMO_FILE_SUFFIX);
+			if (path != null) {
+				((RecordModel) model).saveToDoc(rdoc);
+				if (rdoc.saveDataToFile(path)) {
+					save();
+					JOptionPane.showMessageDialog(this, getString("RecordComponent.saveSuccess"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(this, getString("RecordComponent.saveFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
 
+				}
 			}
 		}
-
 	}
 
 	public void select2D() {
-		((RecordModel)model).selectWhichView(1);
+		((RecordModel) model).selectWhichView(1);
 	}
 
 	public void selectContour() {
-		((RecordModel)model).selectWhichView(2);
+		((RecordModel) model).selectWhichView(2);
 	}
 
 	public void select3D() {
-		((RecordModel)model).selectWhichView(3);
+		((RecordModel) model).selectWhichView(3);
 	}
 
-	public int getSelectWhichView(){
-		return ((RecordModel)model).getSelectWhichView();
+	public int getSelectWhichView() {
+		return ((RecordModel) model).getSelectWhichView();
 	}
-	
+
+	public Status getStatus() {
+		return ((RecordModel) model).status;
+	}
+
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		ChangeInfo info = (ChangeInfo) e.getSource();
@@ -145,33 +149,35 @@ public class RecordComponent extends TabComponent {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_STATUS, null, info.getObject());
 
 			Status status = (Status) info.getObject();
-
-			if (status == Status.STOP) {
-				Object[] options = { getString("RecordComponent.save"), getString("RecordComponent.notSave") };
-				int response = JOptionPane.showOptionDialog(this, getString("RecordComponent.isSaveMoive"), getString("Feemo"), JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				if (response == 0) {
-
-					RecordDoc rdoc = (RecordDoc) doc;
-					String path = Util.chooseSaveFile(this, ".", title + Constants.FEEMO_FILE_SUFFIX);
-					if (path != null) {
-						((RecordModel) model).saveToDoc(rdoc);
-						if (rdoc.saveDataToFile(path)) {
-							save();
-							JOptionPane.showMessageDialog(this, getString("RecordComponent.saveSuccess"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
-						} else {
-							JOptionPane.showMessageDialog(this, getString("RecordComponent.saveFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
-
-						}
-					}
-				}
-			}
-
+//
+//			if (status == Status.STOP) {
+//				((RecordModel)model).setSaving(true);
+//				Object[] options = { getString("RecordComponent.save"), getString("RecordComponent.notSave") };
+//				int response = JOptionPane.showOptionDialog(this, getString("RecordComponent.isSaveMoive"), getString("Feemo"), JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+//				if (response == 0) {
+//
+//					RecordDoc rdoc = (RecordDoc) doc;
+//					String path = Util.chooseSaveFile(this, ".", title + Constants.FEEMO_FILE_SUFFIX);
+//					if (path != null) {
+//						((RecordModel) model).saveToDoc(rdoc);
+//						if (rdoc.saveDataToFile(path)) {
+//							JOptionPane.showMessageDialog(this, getString("RecordComponent.saveSuccess"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
+//							save();
+//						} else {
+//							JOptionPane.showMessageDialog(this, getString("RecordComponent.saveFail"), getString("Feemo"), JOptionPane.PLAIN_MESSAGE);
+//
+//						}
+//					}
+//				}
+//			}
+			if (status == Status.END)
+				firePropertyChange(ActionConstants.RECORD_COMPONENT_CLOSE, null, this);
 		} else if (info.getTag().equals(ActionConstants.DATA_COLLECT_LEN)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_DATA_LEN, null, info.getObject());
 		} else if (info.getTag().equals(ActionConstants.RECORD_VIEW_MOUSE_MOVE)) {
 			firePropertyChange(ActionConstants.RECORD_COMPONENT_MOUSE_MOVE, null, info.getObject());
-		} else if (info.getTag().equals(ActionConstants.DATA_COLLECT_DATA)) {
-
+		} else if (info.getTag().equals(ActionConstants.DATA_COLLECT_SAVE)) {
+			triggerSave();
 		}
 
 	}

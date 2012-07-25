@@ -1,18 +1,22 @@
 package com.ciotc.feemo.component.statusbar;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 import com.ciotc.feemo.component.tabcomponent.impl.RecordComponent;
 import com.ciotc.feemo.component.tabcomponent.impl.RecordModel.Status;
 import com.ciotc.feemo.component.tabcomponent.impl.ViewComponent;
 import com.ciotc.feemo.component.tabcomponent.impl.ViewModel;
 import com.ciotc.feemo.util.ActionConstants;
+import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.I18N;
 
 public class SecondStatusBar extends JPanel implements PropertyChangeListener {
@@ -33,22 +37,26 @@ public class SecondStatusBar extends JPanel implements PropertyChangeListener {
 	Status status;
 	ViewComponent comp;
 
+	public SecondStatusBar() {
+		setBorder(BorderFactory.createMatteBorder(0, Constants.COMPONENT_GAP, 0, Constants.COMPONENT_GAP, Color.LIGHT_GRAY));
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (showWhich == 1)
-			g.drawString(text1, 0, getHeight());
+			g.drawString(text1, 0 + Constants.STATUS_BAR_LEFT_BASE_LINE, getHeight() - Constants.STATUS_BAR_BOTTOM_BASE_LINE);
 		else if (showWhich == 2)
-			g.drawString(text2, 0, getHeight());
+			g.drawString(text2, 0 + Constants.STATUS_BAR_LEFT_BASE_LINE, getHeight() - Constants.STATUS_BAR_BOTTOM_BASE_LINE);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
+
 		if (evt.getPropertyName().equals(ActionConstants.CURRENT_COMPONENT_CHANGE)) {
 			Component temp = (Component) evt.getNewValue();
 			if (temp instanceof RecordComponent) {
-				System.out.println("dd");
+				//System.out.println("dd");
 				showWhich = 1;
 
 			} else if (temp instanceof ViewComponent) {
@@ -72,12 +80,12 @@ public class SecondStatusBar extends JPanel implements PropertyChangeListener {
 			showWhich = 0;
 			repaint();
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_STATUS)) {
-			System.out.println("dd1");
+			//System.out.println("dd1");
 			status = (Status) evt.getNewValue();
 			stateChange(status);
 			repaint();
 		} else if (evt.getPropertyName().equals(ActionConstants.RECORD_COMPONENT_DATA_LEN)) {
-			System.out.println("dd2");
+			//System.out.println("dd2");
 			counter = (Integer) evt.getNewValue();
 			switch (status) {
 			case RECORDING:

@@ -1,32 +1,24 @@
 package com.ciotc.feemo.component.tabcomponent.impl;
 
+import static com.ciotc.feemo.util.ActionConstants.VIEW_FRAME_MODEL;
+import static com.ciotc.feemo.util.ActionConstants.VIEW_FRAME_MOUSE_MOVE;
+import static com.ciotc.feemo.util.ActionConstants.VIEW_VIW_CONTROL;
+import static com.ciotc.feemo.util.Constants.NOMAL_SPEED;
 import static com.ciotc.feemo.util.Constants.SENSOR_NUM;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import com.ciotc.feemo.component.tabcomponent.ChangeInfo;
 import com.ciotc.feemo.component.tabcomponent.Model;
-import static com.ciotc.feemo.util.ActionConstants.*;
-
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
 
 public class ViewModel extends Model implements PropertyChangeListener {
-	public static final int SLOWEST_SPEED = 5000;
-	public static final int NOMAL_SPEED = 1000;
-	public static final int MEDIUM_SLOW_SPEED = 2000;
-	public static final int MEDIUM_FAST_SPEED = 500;
-	public static final int FASTEST_SPEED = 200;
 
 	class PaintTask extends TimerTask {
 
@@ -78,8 +70,8 @@ public class ViewModel extends Model implements PropertyChangeListener {
 
 	public void init() {
 		select2D();
-		select3D();
-		selectContour();
+		//select3D();
+		//selectContour();
 		//play();
 		selectNowFrame();
 	}

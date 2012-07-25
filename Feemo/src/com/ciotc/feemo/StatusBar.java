@@ -7,14 +7,12 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
-import com.ciotc.feemo.component.outlookbar.PercentLayout;
 import com.ciotc.feemo.component.statusbar.FirstStatusBar;
 import com.ciotc.feemo.component.statusbar.SecondStatusBar;
 import com.ciotc.feemo.component.statusbar.ThirdStatusBar;
-import com.ciotc.feemo.component.tabcomponent.impl.RecordComponent;
-import com.ciotc.feemo.component.tabcomponent.impl.ViewComponent;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
+import com.l2fprod.common.swing.PercentLayout;
 
 public class StatusBar extends JPanel implements PropertyChangeListener {
 
@@ -24,11 +22,11 @@ public class StatusBar extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 
 	public StatusBar() {
-		setLayout(new PercentLayout(PercentLayout.HORIZONTAL, 1));
+		setLayout(new PercentLayout(PercentLayout.HORIZONTAL, 0));
 		setPreferredSize(new Dimension(getWidth(), Constants.STATUS_BAR_HEIGHT));
 		FirstStatusBar first = new FirstStatusBar();
 		addPropertyChangeListener(first);
-		add(first, "50%");
+		add(first, "65%");
 		SecondStatusBar second = new SecondStatusBar();
 		addPropertyChangeListener(second);
 		add(second, "20%");

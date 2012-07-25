@@ -1,7 +1,11 @@
 package com.ciotc.feemo.util.image;
 
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 public class FlamingoUtilities {
@@ -39,5 +43,24 @@ public class FlamingoUtilities {
 		} while (width != requestedThumbWidth);
 
 		return thumb;
+	}
+	
+	/**
+	 * Retrieves transparent image of specified dimension.
+	 * 
+	 * @param width
+	 *            Image width.
+	 * @param height
+	 *            Image height.
+	 * @return Transparent image of specified dimension.
+	 */
+	public static BufferedImage getBlankImage(int width, int height) {
+		GraphicsEnvironment e = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		GraphicsDevice d = e.getDefaultScreenDevice();
+		GraphicsConfiguration c = d.getDefaultConfiguration();
+		BufferedImage compatibleImage = c.createCompatibleImage(width, height,
+				Transparency.TRANSLUCENT);
+		return compatibleImage;
 	}
 }

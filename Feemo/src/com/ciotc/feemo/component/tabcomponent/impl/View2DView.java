@@ -18,6 +18,8 @@ import javax.swing.event.MouseInputListener;
 
 import com.ciotc.feemo.component.tabcomponent.paint.MyColor;
 import com.ciotc.feemo.util.ActionConstants;
+import com.ciotc.feemo.util.Constants;
+import com.ciotc.feemo.util.I18N;
 
 public class View2DView extends ViewView implements MouseMotionListener,MouseInputListener {
 
@@ -28,7 +30,9 @@ public class View2DView extends ViewView implements MouseMotionListener,MouseInp
 	
 	boolean isEntering = false;
 	
+	
 	public View2DView() {
+		title = I18N.getString("ViewComponent.View2DView.title");
 		addMouseMotionListener(this);
 		addMouseListener(this);
 	}
@@ -72,12 +76,12 @@ public class View2DView extends ViewView implements MouseMotionListener,MouseInp
 
 			int f = dd[i];
 
-			if (f == 255)
-				color = MyColor.values()[16].getRgb();
-			else if (f == 0) {
+			if (f == Constants.SENSOR_MAX_VALUE)
+				color = MyColor.values()[Constants.SENSOR_COLOR_NUM].getRgb();
+			else if (f == Constants.SENSOR_MIN_VALUE) {
 				continue;
 			} else {
-				int in = f >>> 4;
+				int in = f >>> Constants.SENSOR_NUM_PER_COLOR;
 				color = MyColor.values()[in].getRgb();
 			}
 			g.setColor(color);

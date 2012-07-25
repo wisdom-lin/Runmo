@@ -227,10 +227,10 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 		//开始绘图
 
 		Color color = null;
-		if (dataColor == 255)
-			color = MyColor.values()[16].getRgb();
+		if (dataColor == Constants.SENSOR_MAX_VALUE)
+			color = MyColor.values()[Constants.SENSOR_COLOR_NUM].getRgb();
 		else {
-			int in = dataColor >>> 4;
+			int in = dataColor >>> Constants.SENSOR_NUM_PER_COLOR;
 			color = MyColor.values()[in].getRgb();
 		}
 
@@ -339,12 +339,12 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 
 			int f = dd[i];
 
-			if (f == 255)
-				color = MyColor.values()[16].getRgb();
-			else if (f == 0) {
+			if (f == Constants.SENSOR_MAX_VALUE)
+				color = MyColor.values()[Constants.SENSOR_COLOR_NUM].getRgb();
+			else if (f == Constants.SENSOR_MIN_VALUE) {
 				continue;
 			} else {
-				int in = f >>> 4;
+				int in = f >>> Constants.SENSOR_NUM_PER_COLOR;
 				color = MyColor.values()[in].getRgb();
 			}
 			g.setColor(color);
@@ -433,7 +433,7 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 				 * else if(val == 255) color =
 				 * MyColor.q.getRgb(); else {
 				 */
-				int v = val >> 4;
+				int v = val >> Constants.SENSOR_NUM_PER_COLOR;
 				color = MyColor.values()[v].getRgb();
 
 				// }
@@ -577,10 +577,10 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 				if (isEntering) {
 					float pixel = CalcPixelByWhichSide();
 					Point point = getMousePosition();
-if(point==null){
-	System.out.println("point null");
-	return;
-}
+					if (point == null) {
+						//System.out.println("point null");
+						return;
+					}
 					int i1 = (int) Math.round(point.getX() / pixel);
 					int i2 = (int) Math.round(point.getY() / pixel);
 					int[] ist = new int[3];
@@ -592,7 +592,7 @@ if(point==null){
 					firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, ist);
 				}
 			}
-		}else if(info.getTag().equals(ActionConstants.RECORD_VIEW_INDEX)){
+		} else if (info.getTag().equals(ActionConstants.RECORD_VIEW_INDEX)) {
 			index = (int) info.getObject();
 			repaint();
 		}
@@ -618,16 +618,20 @@ if(point==null){
 		}
 		if (recvdata == null)
 			return;
-		int i1 = Math.round(e.getX() / pixel);
-		int i2 = Math.round(e.getY() / pixel);
-		int[] ist = new int[3];
-		int[] is = InWhichBox(i1, i2, e.getX(), e.getY(), pixel);
-		ist[0] = is[0];
-		ist[1] = is[1];
-		int i = Constants.SENSOR_HEIGHT * ist[0] + ist[1];
-		ist[2] = recvdata[i];
-		firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, ist);
-		isEntering = true;
+		if (index == 1 || index == 2) {
+			int i1 = Math.round(e.getX() / pixel);
+			int i2 = Math.round(e.getY() / pixel);
+			int[] ist = new int[3];
+			int[] is = InWhichBox(i1, i2, e.getX(), e.getY(), pixel);
+			ist[0] = is[0];
+			ist[1] = is[1];
+			int i = Constants.SENSOR_HEIGHT * ist[0] + ist[1];
+			ist[2] = recvdata[i];
+			firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, ist);
+			isEntering = true;
+		}else if(index==3){
+			firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
+		}
 	}
 
 	/**
@@ -790,6 +794,8 @@ if(point==null){
 			if (_rect.contains(point)) {
 				isEntering = true;
 			}
+		} else if (index == 3) {
+			firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
 		}
 	}
 
@@ -803,6 +809,8 @@ if(point==null){
 				firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
 				isEntering = false;
 			}
+		} else if (index == 3) {
+			firePropertyChange(ActionConstants.RECORD_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
 		}
 	}
 

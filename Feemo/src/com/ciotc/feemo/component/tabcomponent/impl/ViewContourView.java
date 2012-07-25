@@ -19,6 +19,7 @@ import com.ciotc.contour.Triangle;
 import com.ciotc.contour.Triangulate;
 import com.ciotc.feemo.component.tabcomponent.paint.MyColor;
 import com.ciotc.feemo.util.Constants;
+import com.ciotc.feemo.util.I18N;
 
 public class ViewContourView extends ViewView {
 
@@ -30,6 +31,10 @@ public class ViewContourView extends ViewView {
 	public final static int rowNum = Constants.SENSOR_HEIGHT;
 	public final static int colNum = Constants.SENSOR_WIDTH;
 
+	public ViewContourView() {
+		title = I18N.getString("ViewComponent.ViewContourView.title");
+	}
+	
 	public void drawFrame(Graphics g, int[] dd) {
 		Graphics2D g2 = (Graphics2D) g;
 		Color oldColor = g2.getColor();
@@ -91,7 +96,7 @@ public class ViewContourView extends ViewView {
 				 * else if(val == 255) color =
 				 * MyColor.q.getRgb(); else {
 				 */
-				int v = val >> 4;
+				int v = val >>Constants.SENSOR_NUM_PER_COLOR;
 				color = MyColor.values()[v].getRgb();
 
 				// }
