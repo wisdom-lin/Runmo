@@ -65,7 +65,6 @@ public class ViewDoc extends Doc {
 			}
 			powa = rf.readInt();
 			gain = rf.readInt();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
