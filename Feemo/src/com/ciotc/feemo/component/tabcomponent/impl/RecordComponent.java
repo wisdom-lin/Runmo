@@ -108,7 +108,8 @@ public class RecordComponent extends TabComponent {
 		int response = JOptionPane.showOptionDialog(this, getString("RecordComponent.isSaveMoive"), getString("Feemo"), JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		if (response == 0) {
 			RecordDoc rdoc = (RecordDoc) doc;
-			String path = Util.chooseSaveFile(this, ".", title + Constants.FEEMO_FILE_SUFFIX);
+			String userDir = System.getProperty("user.home")+"/Desktop";
+			String path = Util.chooseSaveFile(this, userDir, title + Constants.FEEMO_FILE_SUFFIX);
 			if (path != null) {
 				((RecordModel) model).saveToDoc(rdoc);
 				if (rdoc.saveDataToFile(path)) {

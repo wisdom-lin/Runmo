@@ -105,8 +105,9 @@ public class MainFrame extends JFrame implements Context, PropertyChangeListener
 
 	@Override
 	public void openMovie() {
+		String userDir = System.getProperty("user.home")+"/Desktop";
 		//弹出文件对话框
-		String path = Util.chooseOpenFile(this, ".");
+		String path = Util.chooseOpenFile(this, userDir);
 		if (path == null)
 			return;
 		tabpane.openRecordComponent(path);

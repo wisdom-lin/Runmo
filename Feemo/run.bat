@@ -1,1 +1,1 @@
-java -Djava.library.path="jnis" -jar teemo.jar
+java -Djava.library.path="jnis" -jar feemo.jar

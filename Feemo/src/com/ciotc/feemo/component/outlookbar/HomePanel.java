@@ -1,12 +1,15 @@
 package com.ciotc.feemo.component.outlookbar;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 
 import com.ciotc.feemo.Context;
 import com.ciotc.feemo.OutlookBar;
@@ -24,7 +27,7 @@ public class HomePanel extends OutlookBarPanel {
 
 	String className = "OutlookBar.HomePanel.";
 	String title = "home";
-	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png"/*, "help", "images/help.png"*/ };
+	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png", "feedback", "images/feedback.png"/*, "help", "images/help.png"*/};
 
 	Context context;
 
@@ -79,6 +82,24 @@ public class HomePanel extends OutlookBarPanel {
 
 		} else if (e.getActionCommand().equals("help")) {
 			//TODO task
+		} else if (e.getActionCommand().equals("feedback")) {
+			String receiver = "linxiaozhi@ciotc.org";
+			Desktop desktop = null;
+			if (Desktop.isDesktopSupported()) {
+				desktop = Desktop.getDesktop();
+			}
+			if (desktop != null && desktop.isSupported(Desktop.Action.MAIL)) {
+				try {
+					desktop.mail(new URI("mailto:" + receiver));
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				} catch (URISyntaxException ex) {
+					ex.printStackTrace();
+				}
+			}
+
+			//FeedbackClient client = new FeedbackClient(null,true);
+			//client.setVisible(true);
 		}
 	}
 
