@@ -3,6 +3,8 @@ package com.ciotc.feemo;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.citoc.feemo.config.Configurge;
+
 public class Starter {
 
 	/**
@@ -15,6 +17,8 @@ public class Starter {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ignored) {
 		}
+		Configurge.open();
+		
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override

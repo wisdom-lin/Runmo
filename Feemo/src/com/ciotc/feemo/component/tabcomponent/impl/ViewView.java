@@ -8,6 +8,7 @@ import com.ciotc.feemo.component.tabcomponent.ChangeInfo;
 import com.ciotc.feemo.component.tabcomponent.View;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
+import com.citoc.feemo.config.Configurge;
 
 public abstract class ViewView extends View {
 
@@ -59,4 +60,6 @@ public abstract class ViewView extends View {
 		}
 
 	}
+
+	
 }

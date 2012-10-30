@@ -3,14 +3,10 @@ package com.ciotc.feemo.component.tabcomponent.impl;
 import static com.ciotc.feemo.util.Constants.COMPONENT_GAP;
 import static com.ciotc.feemo.util.Constants.SENSOR_HEIGHT;
 import static com.ciotc.feemo.util.Constants.SENSOR_WIDTH;
-import static com.ciotc.feemo.util.I18N.getString;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.GridLayout;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import com.ciotc.feemo.component.tabcomponent.ChangeInfo;
@@ -48,7 +44,8 @@ public class ViewComponent extends TabComponent {
 		model.addChangeListener(viewContour);
 		model.addChangeListener(view3d);
 
-		doc = new ViewDoc(path);
+		doc = new ViewFilterDoc(new ViewDoc(path));
+		//doc = new ViewDoc(path);
 
 		this.title = getSimplePath();
 
@@ -64,10 +61,10 @@ public class ViewComponent extends TabComponent {
 
 	public boolean readDataFromFile() {
 		ViewModel vmodel = (ViewModel) model;
-		ViewDoc vdoc = (ViewDoc) doc;
-		System.out.println("read" + System.currentTimeMillis());
+		ViewDocImpl vdoc = (ViewDocImpl) doc;
+		//System.out.println("read" + System.currentTimeMillis());
 		boolean bool = vdoc.readDataFromFile();
-		System.out.println("read complete" + System.currentTimeMillis());
+		//System.out.println("read complete" + System.currentTimeMillis());
 		if (bool)
 			vmodel.setDoc(vdoc);
 		return bool;
@@ -128,6 +125,12 @@ public class ViewComponent extends TabComponent {
 		close();
 	}
 
+	public void fresh(){
+		//firePropertyChange(ActionConstants.VIEW_COMPONENT_MODEL, null, this);
+		final ViewModel vmodel = (ViewModel) model;
+		vmodel.selectNowFrame();
+	}
+	
 	/**
 	 * 选择长为基准还是宽为基准
 	 */

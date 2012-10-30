@@ -102,6 +102,8 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 	}
 
 	public void drawFrame3D(Graphics g, int[] dd) {
+		if (dd == null)
+			return;
 		Graphics2D g2 = (Graphics2D) g;
 		Color oldColor = g.getColor();
 
@@ -290,6 +292,8 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 	}
 
 	public void drawFrame2D(Graphics g2, int[] dd) {
+		if (dd == null)
+			return;
 		Color oldColor;
 
 		Graphics2D g = (Graphics2D) g2;
@@ -299,8 +303,7 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 
 //		g.fillRect(0, 0, getWidth(), getHeight());
 
-		if (dd == null)
-			return;
+		
 		float pixel = CalcPixelByWhichSide();
 
 		//画边框
@@ -372,7 +375,8 @@ public class RecordView extends View implements MouseMotionListener, MouseInputL
 	}
 
 	public void drawFrameContour(Graphics g, int[] dd) {
-
+		if (dd == null)
+			return;
 		Graphics2D g2 = (Graphics2D) g;
 		Color oldColor = g2.getColor();
 		float pixel = CalcPixelByWhichSide();

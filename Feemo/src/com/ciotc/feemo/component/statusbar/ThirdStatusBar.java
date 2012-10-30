@@ -1,13 +1,11 @@
 package com.ciotc.feemo.component.statusbar;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import com.ciotc.feemo.component.tabcomponent.impl.RecordComponent;

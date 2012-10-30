@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import com.ciotc.feemo.component.tabcomponent.Doc;
 import com.ciotc.feemo.util.Constants;
 
-public class ViewDoc extends Doc {
+public class ViewDoc extends Doc implements ViewDocImpl {
 
 	int powa;
 	int gain;
@@ -37,7 +37,7 @@ public class ViewDoc extends Doc {
 	 * 5、gain <br>
 	 * 参考{@link RecordDoc#saveDataToFile(String) 保存文件的格式}
 	 */
-	boolean readDataFromFile() {
+	public boolean readDataFromFile() {
 		RandomAccessFile rf = null;
 		try {
 			rf = new RandomAccessFile(path, "r");
@@ -85,27 +85,18 @@ public class ViewDoc extends Doc {
 	 * 兼容Teemo的文件
 	 * @return
 	 */
-	boolean readDataFromTeemoFile() {
+	public boolean readDataFromTeemoFile() {
 		return false;
-	}
-
-	public int[] getSelectedFrame(int frameIndex) {
-		return data[frameIndex];
 	}
 
 	public int getFrameLen() {
 		return frameLen;
 	}
 	
-	/**
-	 * 
-	 * @param in
-	 * @param x
-	 *                坐标轴上的横坐标
-	 * @param y
-	 *                坐标轴上的纵坐标
-	 * @return
-	 */
+	public int[] getSelectedFrame(int frameIndex) {
+		return data[frameIndex];
+	}
+	
 	public int getForceinXY(int in, int x, int y) {
 		int i = Constants.SENSOR_HEIGHT * x + y;
 		int d = data[in][i];

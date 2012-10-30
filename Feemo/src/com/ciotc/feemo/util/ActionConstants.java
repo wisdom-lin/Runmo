@@ -36,6 +36,7 @@ public interface ActionConstants {
 	
 	public static final String RECORD_COMPONENT_STATUS = "RECORD_COMPONENT_STATUS";
 	public static final String RECORD_COMPONENT_DATA_LEN = "RECORD_COMPONENT_DATA_LEN";
+	//public static final String ALL_COMPONENT_FILTER_VALUE = "ALL_COMPONENT_FILTER_VALUE";
 	
 	
 	

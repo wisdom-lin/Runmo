@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import javax.swing.JButton;
 
 import com.ciotc.feemo.Context;
+import com.ciotc.feemo.MainFrame;
 import com.ciotc.feemo.OutlookBar;
 import com.ciotc.feemo.setting.SettingDialog;
 import com.ciotc.feemo.util.ActionConstants;
@@ -27,7 +28,7 @@ public class HomePanel extends OutlookBarPanel {
 
 	String className = "OutlookBar.HomePanel.";
 	String title = "home";
-	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png", "feedback", "images/feedback.png"/*, "help", "images/help.png"*/};
+	String[] buttons = { "new", "images/newMovie.png", "open", "images/openMovie.png", "option", "images/option.png", "lengend", "images/lengend.png", "feedback", "images/feedback.png"/*, "help", "images/help.png"*/};
 
 	Context context;
 
@@ -80,6 +81,13 @@ public class HomePanel extends OutlookBarPanel {
 			sd.setModal(true);
 			sd.setVisible(true);
 
+		} else if (e.getActionCommand().equals("lengend")) {
+			//System.out.println("lengend");
+			if(context instanceof MainFrame){
+				((MainFrame) context).controlLengend();
+			}
+			
+			
 		} else if (e.getActionCommand().equals("help")) {
 			//TODO task
 		} else if (e.getActionCommand().equals("feedback")) {

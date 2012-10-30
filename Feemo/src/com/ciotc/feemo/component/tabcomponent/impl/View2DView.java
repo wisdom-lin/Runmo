@@ -105,7 +105,7 @@ public class View2DView extends ViewView implements MouseMotionListener, MouseIn
 			y = i % SENSOR_HEIGHT; // y
 
 			int f = dd[i];
-
+			
 			if (f == Constants.SENSOR_MAX_VALUE)
 				color = MyColor.values()[Constants.SENSOR_COLOR_NUM].getRgb();
 			else if (f == Constants.SENSOR_MIN_VALUE) {
@@ -200,6 +200,7 @@ public class View2DView extends ViewView implements MouseMotionListener, MouseIn
 		}
 		return new int[] { i, j };
 	}
+
 	/**
 	 * 
 	 * @param x
@@ -238,6 +239,7 @@ public class View2DView extends ViewView implements MouseMotionListener, MouseIn
 		}
 		return new int[] { i, j };
 	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -274,8 +276,8 @@ public class View2DView extends ViewView implements MouseMotionListener, MouseIn
 //		Point point = e.getPoint();
 //		
 //		if (!_rect.contains(point)) {
-			firePropertyChange(ActionConstants.VIEW_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
-			isEntering = false;
+		firePropertyChange(ActionConstants.VIEW_VIEW_MOUSE_MOVE, null, new int[] { Integer.MIN_VALUE, 0, 0 });
+		isEntering = false;
 //		}
 
 	}

@@ -31,7 +31,7 @@ public class RecordComponent extends TabComponent {
 	/**
 	 * //1表示2D，2表示轮廓，3表示3D
 	 */
-	int lastIndex = 1;//初始化为1，即2D图
+	//int lastIndex = 2;//初始化为1，即2D图
 
 	public RecordComponent() {
 		model = new RecordModel();
@@ -53,6 +53,8 @@ public class RecordComponent extends TabComponent {
 	}
 
 	public void start() {
+		//选择轮廓图作为录制初始图
+		selectContour();
 		((RecordModel) model).start();
 	}
 

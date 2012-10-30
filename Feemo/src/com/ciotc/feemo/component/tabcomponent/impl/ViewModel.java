@@ -8,6 +8,8 @@ import static com.ciotc.feemo.util.Constants.SENSOR_NUM;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.DataInputStream;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,6 +19,7 @@ import com.ciotc.feemo.component.tabcomponent.ChangeInfo;
 import com.ciotc.feemo.component.tabcomponent.Model;
 import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
+import com.citoc.feemo.config.Configurge;
 
 public class ViewModel extends Model implements PropertyChangeListener {
 
@@ -62,16 +65,16 @@ public class ViewModel extends Model implements PropertyChangeListener {
 	Timer timer = new Timer();
 	PaintTask paint;
 
-	ViewDoc doc;
+	ViewDocImpl doc;
 
 	ViewModel() {
 
 	}
 
 	public void init() {
-		select2D();
+		//select2D();
 		//select3D();
-		//selectContour();
+		selectContour();
 		//play();
 		selectNowFrame();
 	}
@@ -276,7 +279,7 @@ public class ViewModel extends Model implements PropertyChangeListener {
 		}
 	}
 
-	public void setDoc(ViewDoc doc) {
+	public void setDoc(ViewDocImpl doc) {
 		this.doc = doc;
 		this.frameLen = doc.getFrameLen();
 	}
@@ -321,6 +324,8 @@ public class ViewModel extends Model implements PropertyChangeListener {
 			fireChangeEvent(new ChangeEvent(new ChangeInfo(VIEW_FRAME_MOUSE_MOVE, this)));
 		}
 	}
+
+	
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

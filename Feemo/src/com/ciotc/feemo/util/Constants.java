@@ -143,4 +143,12 @@ public class Constants {
 	 * 1s = 1000ms
 	 */
 	public static final int TIME_UNIT = 1000;
+	/**
+	 * 窗体的最小宽度
+	 */
+	public static final int MAINFRAME_MIN_WIDTH = 80;
+	/**
+	 * 窗体的最小长度
+	 */
+	public static final int MAINFRAME_MIN_HEIGHT = 540;
 }

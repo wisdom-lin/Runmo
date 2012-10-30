@@ -1,6 +1,5 @@
 package com.ciotc.feemo.component.tabcomponent.impl;
 
-import static com.ciotc.feemo.util.ActionConstants.VIEW_FRAME_MOUSE_MOVE;
 import static com.ciotc.feemo.util.USBLock.LOCK;
 
 import java.beans.PropertyChangeEvent;
@@ -23,6 +22,7 @@ import com.ciotc.feemo.util.ActionConstants;
 import com.ciotc.feemo.util.Constants;
 import com.ciotc.feemo.util.USBLock;
 import com.ciotc.teemo.usbdll.USBDLL;
+import com.citoc.feemo.config.Configurge;
 
 public class RecordModel extends Model implements TriggerCloser, TriggerOpener, PropertyChangeListener {
 	/**
@@ -72,6 +72,9 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 	volatile boolean pause = false; //暂停
 	boolean isSave = false;
 	//boolean isSaving = false;
+	/**
+	 * //1表示2D，2表示轮廓，3表示3D
+	 */
 	int selectWhichView = 1;
 
 	public RecordModel() {
@@ -152,10 +155,7 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 				USBDLL.setGain(_gain);
 				recvdata = USBDLL.collectFrame();
 			}
-			final int[] temp = new int[recvdata.length];
-			for (int i = 0; i < temp.length; i++) {
-				temp[i] = recvdata[i] & 0xff;
-			}
+			final int[] temp = doFilter(recvdata);
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
@@ -190,10 +190,8 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 				datas.add(bData);
 			}
 
-			final int[] temp = new int[recvdata.length];
-			for (int i = 0; i < temp.length; i++) {
-				temp[i] = recvdata[i] & 0xff;
-			}
+			final int[] temp = doFilter(recvdata);
+
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
@@ -332,10 +330,10 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 
 	}
 
-	public void triggerSave(){
+	public void triggerSave() {
 		fireChangeEvent(new ChangeEvent(new ChangeInfo(ActionConstants.DATA_COLLECT_SAVE, null)));
 	}
-	
+
 	/**
 	 * 直接关闭 根据现在的状态调用停止 保存 和关闭
 	 */
@@ -400,6 +398,57 @@ public class RecordModel extends Model implements TriggerCloser, TriggerOpener, 
 		synchronized (USBLock.LOCK) {
 			USBDLL.setButton2On();
 		}
+	}
+
+	/**
+	 * 默认设置一种
+	 * @param src
+	 * @return
+	 */
+	int[] doFilter(byte[] src){
+		return doFilter2(src);
+	}
+	
+	/**
+	 * 滤值,将数值调整正确
+	 * @param src 原数组
+	 * @return 滤值后的数组
+	 */
+	int[] doFilter1(byte[] src) {
+		int[] dest = new int[src.length];
+		try {
+			for (int i = 0; i < src.length; i++) {
+				dest[i] = src[i] & 0xff;
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dest;
+
+	}
+
+	/**
+	 * 如果低于最低值时，就需要滤掉.用于数值
+	 * @param src 原数组
+	 * @return 滤值后的数组
+	 */
+	int[] doFilter2(byte[] src) {
+		String string = Configurge.getProperty(Configurge.FILTER_VAULE);
+		int[] dest = new int[src.length];
+		try {
+			int value = Integer.parseInt(string.trim());
+
+			for (int i = 0; i < dest.length; i++) {
+				dest[i] = src[i] & 0xff;
+				if (dest[i] <= value)
+					dest[i] = 0;
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dest;
 	}
 
 	@Override
