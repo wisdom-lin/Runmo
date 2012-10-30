@@ -3,13 +3,13 @@
 	<description>
             feemo project
     </description>
-	<property name="testDir" value="${user.home}/Desktop/teemo_test" />
-<!--	<property name="destDir" value="D:/Program Files/install4j/samples/feemo" />-->
+	<property name="testDir" value="${user.home}/Desktop/feemo_test" />
+	<!--	<property name="destDir" value="D:/Program Files/install4j/samples/feemo" />-->
 	<property name="destDir" value="install" />
 	<property name="serverDir" value="\\Kevin-PC\share\项目\Feemo\应用程序" />
 	<property name="classpath" value="libs/contour.jar libs/outlookbar.jar" />
 
-	<property name="version" value="1.0.0" />
+	<property name="version" value="1.0.0.2" />
 	<property name="shortName" value="feemo" />
 	<property name="title" value="Feemo标准力测试系统" />
 	<!--版本号-->
@@ -26,6 +26,7 @@
 			</manifest>
 			<fileset dir="bin" />
 		</jar>
+	
 		<mkdir dir="${testDir}/jnis" />
 		<copy todir="${testDir}/jnis" overwrite="true">
 			<fileset dir="jnis" />
@@ -49,6 +50,7 @@
 			</manifest>
 			<fileset dir="bin" />
 		</jar>
+	
 		<mkdir dir="${destDir}/jnis" />
 		<copy todir="${destDir}/jnis" overwrite="true">
 			<fileset dir="jnis" />
@@ -59,7 +61,7 @@
 		</copy>
 		<copy file=".feemo_settings" todir="${destDir}" overwrite="true">
 		</copy>
-		<install4j projectfile="${destDir}\feemo.install4j" destination="${destDir}" >
+		<install4j projectfile="${destDir}\feemo.install4j" destination="${destDir}">
 			<variable name="version" value="${version}" />
 			<variable name="title" value="${title}" />
 			<variable name="shortName" value="${shortName}" />
