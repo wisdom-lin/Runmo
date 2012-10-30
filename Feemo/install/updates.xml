@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="">
-  <entry targetMediaFileId="87" updatableVersionMin="" updatableVersionMax="" fileName="feemo_windows_1_0_0.exe" newVersion="1.0.0" newMediaFileId="87" fileSize="19056128" bundledJre="windows-x86-1.7.0" archive="false">
-    <comment />
-  </entry>
-</updateDescriptor>
-

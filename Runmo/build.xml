@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Runmo" default="runnable jar">
+	<description>
+		Runmo project
+    </description>
+	<property name="testDir" value="${user.home}/Desktop/runmo_test" />
+<!--	<property name="destDir" value="D:/Program Files/install4j/samples/runmo" />-->
+	<property name="destDir" value="install" />
+	<property name="serverDir" value="\\Kevin-PC\share\项目\Runmo\应用程序" />
+	<property name="classpath" value="libs/contour.jar libs/outlookbar.jar" />
+
+	<property name="version" value="1.0.0" />
+	<property name="shortName" value="Runmo" />
+	<property name="title" value="Runmo足部测力系统" />
+	<!--版本号-->
+
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="runnable jar" description="description">
+		<mkdir dir="${testDir}" />
+		<jar destfile="${testDir}/runmo.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.ciotc.runmo.Starter" />
+				<attribute name="Class-path" value="${classpath}" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+		<mkdir dir="${testDir}/jnis" />
+		<copy todir="${testDir}/jnis" overwrite="true">
+			<fileset dir="jnis" />
+		</copy>
+		<mkdir dir="${testDir}/libs" />
+		<copy todir="${testDir}/libs" overwrite="true">
+			<fileset dir="libs" />
+		</copy>
+		<copy file=".runmo_settings" todir="${testDir}" overwrite="true">
+		</copy>
+		<copy file="run.bat" todir="${testDir}" overwrite="true">
+		</copy>
+	</target>
+
+	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="D:\Program Files\install4j\bin\ant.jar" />
+	<target name="build exe">
+		<jar destfile="${destDir}/runmo.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.ciotc.runmo.Starter" />
+				<attribute name="Class-path" value="${classpath}" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+		<mkdir dir="${destDir}/jnis" />
+		<copy todir="${destDir}/jnis" overwrite="true">
+			<fileset dir="jnis" />
+		</copy>
+		<mkdir dir="${destDir}/libs" />
+		<copy todir="${destDir}/libs" overwrite="true">
+			<fileset dir="libs" />
+		</copy>
+		<copy file=".runmo_settings" todir="${destDir}" overwrite="true">
+		</copy>
+		<install4j projectfile="${destDir}\runmo.install4j" destination="${destDir}" >
+			<variable name="version" value="${version}" />
+			<variable name="title" value="${title}" />
+			<variable name="shortName" value="${shortName}" />
+		</install4j>
+	</target>
+
+</project>
